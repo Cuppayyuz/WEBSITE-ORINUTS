@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Orinuts</title>
+  <style>
+    /* === RESET & BASE STYLES === */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: sans-serif;
+      background-color: #F4EFD8;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* === UTILITY CLASSES === */
+    .container {
+      width: 100%;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Media Query untuk container (meniru tailwind md & lg) */
+    @media (min-width: 768px) {
+      .container {
+        padding-left: 4rem;
+        padding-right: 4rem;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .container {
+        max-width: 1024px; /* Atur max-width sesuai kebutuhan */
+      }
+    }
+
+    /* === NAVBAR === */
+    .navbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      z-index: 50;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px); /* backdrop-blur-sm */
+    }
+
+    .navbar.shadow-lg {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      background-color: rgba(244, 239, 216, 0.8); /* Sedikit background saat scroll */
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-img {
+      height: 3.5rem; /* h-14 */
+    }
+
+    /* Menu Desktop */
+    .desktop-menu {
+      display: none; /* Hidden di mobile */
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      background-color: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(12px);
+    }
+
+    .desktop-menu a, .desktop-menu p {
+      border-radius: 9999px;
+      padding: 0.5rem 2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .desktop-menu a:hover, .desktop-menu p:hover {
+      color: #15803d; /* green-700 */
+    }
+
+    .menu-active {
+      background-color: white;
+      color: black;
+    }
+
+    /* Hamburger Button */
+    .hamburger-btn {
+      position: relative;
+      z-index: 60;
+      width: 2rem;
+      height: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    
+    /* Tampilkan hamburger hanya di mobile, sembunyikan di desktop */
+    @media (min-width: 1024px) {
+      .desktop-menu {
+        display: flex;
+      }
+      .hamburger-btn {
+        display: none;
+      }
+    }
+
+    .hamburger-span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: white; /* Ubah ke hitam jika background terang */
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+    
+    /* Agar hamburger terlihat di background terang navbar saat ini */
+    .hamburger-span { background-color: #555; } 
+
+    /* Animasi Hamburger */
+    .hamburger-btn.open span:nth-child(1) {
+      transform: translateY(10px) rotate(45deg);
+    }
+    .hamburger-btn.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger-btn.open span:nth-child(3) {
+      transform: translateY(-10px) rotate(-45deg);
+    }
+
+    /* === MOBILE MENU (SIDEBAR) === */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 75%;
+      max-width: 24rem;
+      background-color: #92400e; /* amber-800 */
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 50;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    .mobile-menu-content {
+      padding: 2rem;
+    }
+
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      color: white;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .mobile-link {
+      display: block;
+      padding: 0.75rem 0;
+      color: white;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+    
+    .mobile-link:hover {
+      color: #166534; /* green-800 */
+    }
+
+    /* === HERO SECTION === */
+    .hero-section {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      padding-top: 4.75rem; /* pt-19 approx */
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #C6B5A4, transparent);
+      z-index: 10;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 32rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 3.75rem; /* text-6xl */
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    @media (min-width: 768px) {
+      .hero-title {
+        font-size: 6rem; /* text-8xl */
+      }
+    }
+
+    .hero-text {
+      margin-top: 1.5rem;
+      font-weight: 600;
+      color: white;
+      line-height: 1.625;
+      font-size: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .hero-text {
+        font-size: 1.125rem;
+      }
+    }
+
+    /* === CONTACT SECTION === */
+    .contact-section {
+      position: relative;
+      width: 100%;
+      padding: 4rem 0;
+      overflow: hidden;
+    }
+
+    @media (min-width: 1024px) {
+      .contact-section {
+        padding: 6rem 0;
+      }
+    }
+
+    /* Efek blur background (orange blob) */
+    .blur-blob {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 30%;
+      height: 30%;
+      background-color: #fdba74; /* orange-300 */
+      filter: blur(64px); /* blur-3xl */
+      opacity: 0.5;
+      transform: translate(-25%, -25%);
+      z-index: 0;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      position: relative;
+      z-index: 10;
+      align-items: start;
+    }
+
+    @media (min-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: 1fr 1fr; /* 2 Kolom di desktop */
+        gap: 4rem;
+      }
+    }
+
+    /* Cards Styles */
+    .cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .cards-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .info-card {
+      background-color: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 2px solid;
+      min-height: 180px;
+    }
+
+    .border-pink { border-color: #FA7A6F; }
+    .border-lime { border-color: #AAF335; }
+    .border-darkpink { border-color: #F877C1; }
+
+    .text-pink { color: #ec4899; }
+    .text-green { color: #22c55e; }
+    .text-gray { color: #374151; font-size: 0.875rem; margin-top: 0.25rem; font-weight: 600; }
+
+    .card-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    /* Map Style */
+    .map-container {
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      overflow: hidden;
+    }
+    .map-container iframe {
+      width: 100%;
+      display: block;
+    }
+
+    /* Form Styles */
+    .form-card {
+      background-color: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .form-card {
+        padding: 2.5rem;
+      }
+    }
+
+    .form-title {
+      font-size: 1.875rem;
+      font-weight: bold;
+      color: #1f2937;
+    }
+    .form-subtitle {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input, .form-textarea {
+      display: block;
+      width: 100%;
+      border-radius: 1rem;
+      border: 1px solid #d1d5db;
+      background-color: white;
+      padding: 1rem;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: #06b6d4;
+      box-shadow: 0 0 0 2px #06b6d4;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background-color: #94a3b8; /* slate-400 */
+      color: white;
+      font-weight: bold;
+      padding: 1rem 1.5rem;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-btn:hover {
+      background-color: #64748b; /* slate-500 */
+    }
+
+    /* === ICONS & MASKS (Dari kode aslimu) === */
+    .icon-mask {
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .icon-mail {
+      background-color: #FA7A6F;
+      -webkit-mask-image: url('content/icon/mail.svg');
+      mask-image: url('content/icon/mail.svg');
+    }
+
+    /* === FOOTER === */
+    .footer-sret {
+      width: 100%;
+      position: relative;
+      bottom: -4px;
+      display: block;
+    }
+
+    footer {
+      background-color: #ea7003;
+      color: white;
+      padding: 2.5rem;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.875rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+    }
+
+    .footer-brand {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+    
+    @media (min-width: 768px) {
+      .footer-brand {
+        width: 25%;
+        padding-right: 2rem;
+        margin-bottom: 0;
+      }
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 0.75rem;
+      padding-top: 1.25rem;
+    }
+    
+    .social-icon-img {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      border: 1px solid #f3f4f6;
+      padding: 0.25rem;
+      background-color: white;
+    }
+
+    .footer-links-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-links-container {
+        width: 75%;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    .footer-col {
+      width: 100%;
+    }
+    @media (min-width: 768px) {
+      .footer-col { width: 33%; }
+    }
+
+    .footer-heading {
+      font-weight: bold;
+      font-size: 1.125rem;
+      padding-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .footer-link {
+      display: block;
+      line-height: 2;
+    }
+    .footer-link:hover {
+      text-decoration: underline;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid white;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    /* === INPUT NUMBER RESET (Dari kode aslimu) === */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="navbar" class="navbar">
+    <div class="container nav-content">
+      <div>
+        <img src="content/logo.png" alt="logo" class="logo-img" />
+      </div>
+
+      <nav class="desktop-menu">
+        <a href="index.html">HOME</a>
+        <a href="about.html">ABOUT US</a>
+        <a href="product.html">PRODUCT</a>
+        <p class="menu-active">CONTACT</p>
+      </nav>
+
+      <div class="lg:hidden flex items-center">
+        <button id="hamburger-button" class="hamburger-btn">
+          <span class="hamburger-span"></span>
+          <span class="hamburger-span"></span>
+          <span class="hamburger-span"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobile-menu" class="mobile-menu">
+    <div class="mobile-menu-content">
+      <div class="mobile-header">
+        <h2 style="font-size: 1.5rem; font-weight: bold;">Menu</h2>
+        <button id="close-menu" class="close-btn">✕</button>
+      </div>
+
+      <a href="#" class="mobile-link">HOME</a>
+      <a href="#" class="mobile-link">ABOUT US</a>
+      <a href="#" class="mobile-link">PRODUCT</a>
+      <a href="#" class="mobile-link" style="border-bottom: none;">CONTACT</a>
+      
+      <hr style="opacity: 0.3; margin: 1.5rem 0;" />
+    </div>
+  </div>
+
+  <section class="hero-section">
+    <img src="content/fotomockup/ENERGY BOOSTER MIX 7A.jpg" alt="Latar belakang produk Orinuts" class="hero-bg" />
+    <div class="hero-overlay"></div>
+
+    <div class="container">
+      <div class="hero-content">
+        <h2 class="hero-title">Contact Us</h2>
+        <p class="hero-text">
+          Punya pertanyaan? Kami siap membantu! Hubungi kami melalui formulir,
+          email, atau media sosial kami.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="blur-blob" aria-hidden="true"></div>
+
+    <div class="container">
+      <div class="contact-grid">
+
+        <div class="cards-container">
+          <div class="cards-row">
+            <div class="info-card border-pink">
+              <div class="icon-mask icon-mail"></div>
+              <p class="text-pink" style="margin-top: 0.75rem; font-weight: 600;">Email</p>
+              <p class="text-gray">orinuts.official@gmail.com</p>
+            </div>
+            <div class="info-card border-lime">
+              <img src="content/icon/wa.png" alt="WhatsApp" class="card-icon" />
+              <p class="text-green" style="margin-top: 0.75rem; font-weight: 600;">WhatsApp</p>
+              <p class="text-gray">+62 816-521-369</p>
+            </div>
+          </div>
+
+          <div class="info-card border-darkpink">
+            <img src="content/icon/shopping-bag.png" alt="Store" class="card-icon" />
+            <p class="text-pink" style="margin-top: 0.75rem; font-weight: 600;">store</p>
+            <p class="text-gray">orinuts official @shopee id</p>
+            <p class="text-gray">orinuts official @tokopedia id</p>
+          </div>
+
+          <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d989.4189616679389!2d112.69222086956995!3d-7.277675899545579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fc18402c4a49%3A0xe27100c485d0e776!2sPerumahan%20Bavarian%20Village!5e0!3m2!1sid!2sid!4v1761877014298!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="form-title">Send us message</h3>
+          <p class="form-subtitle">
+            Apapun yang ingin Anda sampaikan pertanyaan, masukan, atau sekadar salam tuliskan di bawah ini.
+          </p>
+
+          <form class="mt-8" style="margin-top: 2rem;">
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" id="name" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label for="message" class="form-label">Message</label>
+              <textarea id="message" rows="6" class="form-textarea"></textarea>
+            </div>
+
+            <div>
+              <button type="submit" class="submit-btn">
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <img src="content/sret/sret-orange.png" alt="sret orange" class="footer-sret" />
+  
+  <footer>
+    <div class="container">
+      <img src="/content/logo.png" alt="Orinuts Logo" style="width: 8rem; margin-bottom: 1.5rem;" />
+
+      <div class="footer-content">
+        <div class="footer-brand">
+          <p style="line-height: 1.625;">
+            the No.1 Healthy Snack in Indonesia. We provide <br />
+            premium quality roasted nut snacks, crafted <br />
+            without salt, sugar, preservatives, or MSG — <br />
+            delivering a pure and healthy taste in every bite.
+          </p>
+
+          <div class="social-icons">
+            <a href=""><img src="content/icon/instagram.svg" alt="Instagram" class="social-icon-img" /></a>
+            <a href=""><img src="content/icon/twitter.svg" alt="Twitter" class="social-icon-img" /></a>
+            <a href=""><img src="content/icon/facebook.svg" alt="Facebook" class="social-icon-img" /></a>
+            <a href=""><img src="content/icon/mail.svg" alt="Email" class="social-icon-img" /></a>
+          </div>
+        </div>
+
+        <div class="footer-links-container">
+          <div class="footer-col">
+            <h2 class="footer-heading">main office</h2>
+            <p style="line-height: 1.625;">
+              Bavarian Village A 7,<br />
+              Darmo Permai Baru III,<br />
+              Surabaya, Indonesia 60188
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-heading">main menu</h2>
+            <a href="" class="footer-link">HOME</a>
+            <a href="" class="footer-link">ABOUT US</a>
+            <a href="" class="footer-link">PRODUCT</a>
+            <a href="" class="footer-link">CONTACT</a>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-heading">Official Online Store</h2>
+            <p style="line-height: 2;">
+              Official Shopee <br />
+              Official Tokopedia <br />
+              <br />
+              +62 816-521-369
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <p style="font-size: 0.875rem; margin-top: 0.5rem;">
+        Orinuts © 2025 All Rights Reserved. | Privacy Policy Term of Service
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar Scroll Effect
+    const navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add("shadow-lg");
+      } else {
+        navbar.classList.remove("shadow-lg");
+      }
+    });
+
+    // Hamburger Menu Logic
+    const hamburgerButton = document.getElementById("hamburger-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const closeMenuButton = document.getElementById("close-menu");
+
+    function openMenu() {
+      mobileMenu.classList.add("active"); // Menggunakan class active untuk trigger transform
+      hamburgerButton.classList.add("open"); // Untuk animasi icon X
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.remove("active");
+      hamburgerButton.classList.remove("open");
+    }
+
+    hamburgerButton.addEventListener("click", openMenu);
+    closeMenuButton.addEventListener("click", closeMenu);
+  </script>
+</body>
+
+</html>
