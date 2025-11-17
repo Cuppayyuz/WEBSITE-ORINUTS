@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,10 +10,10 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
     }
 
     body {
-      font-family: sans-serif;
       background-color: #F4EFD8;
       width: 100%;
       overflow-x: hidden;
@@ -23,47 +22,58 @@
     a {
       text-decoration: none;
       color: inherit;
+      transition: color 0.3s;
     }
 
-    /* === UTILITY CLASSES === */
+    ul {
+      list-style: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* === UTILITY CLASSES (Container Global) === */
+    /* CATATAN: Saya menggunakan .container dari file PERTAMA 
+      agar layout-nya konsisten dengan navbar baru.
+    */
     .container {
       width: 100%;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-      margin-left: auto;
-      margin-right: auto;
+      padding: 0 6rem;
+      margin: 0 auto;
     }
 
-    /* Media Query untuk container (meniru tailwind md & lg) */
     @media (min-width: 768px) {
       .container {
-        padding-left: 4rem;
-        padding-right: 4rem;
+        padding: 0 4rem;
       }
     }
-    
     @media (min-width: 1024px) {
       .container {
-        max-width: 1024px; /* Atur max-width sesuai kebutuhan */
+        max-width: 1280px;
+        padding: 0 3.5rem;
       }
     }
 
-    /* === NAVBAR === */
+    /* =========================================
+         2. NAVBAR (DARI FILE PERTAMA)
+         ========================================= */
     .navbar {
       position: fixed;
+      top: 0;
       left: 0;
       right: 0;
-      top: 0;
-      z-index: 50;
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
+      z-index: 100;
+      /* PERUBAHAN DISINI: Padding dinaikkan dari 8px ke 12px */
+      padding: 0.5rem 0;
       transition: all 0.3s ease;
-      backdrop-filter: blur(4px); /* backdrop-blur-sm */
+      background-color: rgba(0, 0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
     }
 
     .navbar.shadow-lg {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      background-color: rgba(244, 239, 216, 0.8); /* Sedikit background saat scroll */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     .nav-content {
@@ -72,133 +82,134 @@
       align-items: center;
     }
 
-    .logo-img {
-      height: 3.5rem; /* h-14 */
+    .logo {
+      /* PERUBAHAN DISINI: Tinggi logo dinaikkan dari 50px ke 54px */
+      height: 54px;
     }
 
     /* Menu Desktop */
-    .desktop-menu {
-      display: none; /* Hidden di mobile */
-      padding: 0.25rem 0.5rem;
-      border-radius: 9999px;
+    .nav-links {
+      display: none;
       background-color: rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(10px);
+      padding: 5px 10px;
+      border-radius: 999px;
     }
 
-    .desktop-menu a, .desktop-menu p {
-      border-radius: 9999px;
+    .nav-links a {
       padding: 0.5rem 2rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-block;
+      border-radius: 999px;
+      font-weight: 500;
+      font-size: 16px;
     }
 
-    .desktop-menu a:hover, .desktop-menu p:hover {
-      color: #15803d; /* green-700 */
-    }
-
-    .menu-active {
-      background-color: white;
-      color: black;
+    .nav-links a.active,
+    .nav-links a:hover {
+      background-color: #fff;
+      color: inherit;
     }
 
     /* Hamburger Button */
-    .hamburger-btn {
-      position: relative;
-      z-index: 60;
-      width: 2rem;
-      height: 1.5rem;
+    .hamburger {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      align-items: center;
+      width: 30px;
+      height: 24px;
       background: none;
       border: none;
       cursor: pointer;
-    }
-    
-    /* Tampilkan hamburger hanya di mobile, sembunyikan di desktop */
-    @media (min-width: 1024px) {
-      .desktop-menu {
-        display: flex;
-      }
-      .hamburger-btn {
-        display: none;
-      }
+      z-index: 101;
     }
 
-    .hamburger-span {
+    .hamburger span {
       display: block;
       width: 100%;
-      height: 2px;
-      background-color: white; /* Ubah ke hitam jika background terang */
+      height: 3px;
+      background-color: white;
       transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     }
-    
-    /* Agar hamburger terlihat di background terang navbar saat ini */
-    .hamburger-span { background-color: #555; } 
 
-    /* Animasi Hamburger */
-    .hamburger-btn.open span:nth-child(1) {
+    .hamburger.open span:nth-child(1) {
       transform: translateY(10px) rotate(45deg);
     }
-    .hamburger-btn.open span:nth-child(2) {
+    .hamburger.open span:nth-child(2) {
       opacity: 0;
     }
-    .hamburger-btn.open span:nth-child(3) {
+    .hamburger.open span:nth-child(3) {
       transform: translateY(-10px) rotate(-45deg);
     }
 
-    /* === MOBILE MENU (SIDEBAR) === */
+    /* =========================================
+         MOBILE MENU (DARI FILE PERTAMA)
+         ========================================= */
     .mobile-menu {
       position: fixed;
       top: 0;
       right: 0;
       height: 100vh;
-      width: 75%;
-      max-width: 24rem;
-      background-color: #92400e; /* amber-800 */
+      width: 85%;
+      max-width: 400px;
+      z-index: 200;
       transform: translateX(100%);
-      transition: transform 0.3s ease-in-out;
-      z-index: 50;
+      transition: transform 0.3s ease-in-out, background-color 0.5s ease;
+      padding: 30px;
       overflow-y: auto;
+      background-color: white;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
     }
 
     .mobile-menu.active {
       transform: translateX(0);
     }
 
-    .mobile-menu-content {
-      padding: 2rem;
-    }
-
     .mobile-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
-      color: white;
+      margin-bottom: 30px;
+    }
+
+    .mobile-header h2 {
+      font-size: 24px;
+      transition: color 0.3s;
     }
 
     .close-btn {
       background: none;
       border: none;
-      color: white;
-      font-size: 1.5rem;
+      font-size: 32px;
       cursor: pointer;
+      transition: color 0.3s;
     }
 
     .mobile-link {
       display: block;
-      padding: 0.75rem 0;
-      color: white;
+      padding: 15px 0;
       font-weight: 600;
-      border-bottom: 1px solid rgba(255,255,255,0.3);
+      font-size: 18px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      transition: color 0.3s;
     }
+
+    @media (min-width: 1024px) {
+      .nav-links {
+        display: flex;
+      }
+      .hamburger {
+        display: none;
+      }
+    }
+
+    /* Utility Desktop Hidden */
+    /* CATATAN: .lg-hidden dari file kedua tidak diperlukan 
+      karena @media query di atas sudah mengaturnya
+    */
     
-    .mobile-link:hover {
-      color: #166534; /* green-800 */
-    }
+
+    /* =========================================
+         KONTEN HALAMAN CONTACT (File Kedua)
+         ========================================= */
 
     /* === HERO SECTION === */
     .hero-section {
@@ -218,7 +229,8 @@
       height: 100%;
       object-fit: cover;
       z-index: 0;
-      padding-top: 4.75rem; /* pt-19 approx */
+      /* Disesuaikan dengan tinggi navbar baru */
+      padding-top: 80px; 
     }
 
     .hero-overlay {
@@ -237,10 +249,11 @@
       max-width: 32rem;
       margin: 0 auto;
       text-align: center;
+      margin-top: 60px;
     }
 
     .hero-title {
-      font-size: 3.75rem; /* text-6xl */
+      font-size: 3.75rem;
       font-weight: bold;
       color: white;
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
@@ -248,7 +261,7 @@
 
     @media (min-width: 768px) {
       .hero-title {
-        font-size: 6rem; /* text-8xl */
+        font-size: 6rem;
       }
     }
 
@@ -287,8 +300,8 @@
       left: 0;
       width: 30%;
       height: 30%;
-      background-color: #fdba74; /* orange-300 */
-      filter: blur(64px); /* blur-3xl */
+      background-color: #fdba74;
+      filter: blur(64px);
       opacity: 0.5;
       transform: translate(-25%, -25%);
       z-index: 0;
@@ -305,7 +318,7 @@
 
     @media (min-width: 1024px) {
       .contact-grid {
-        grid-template-columns: 1fr 1fr; /* 2 Kolom di desktop */
+        grid-template-columns: 1fr 1fr;
         gap: 4rem;
       }
     }
@@ -343,13 +356,28 @@
       min-height: 180px;
     }
 
-    .border-pink { border-color: #FA7A6F; }
-    .border-lime { border-color: #AAF335; }
-    .border-darkpink { border-color: #F877C1; }
+    .border-pink {
+      border-color: #FA7A6F;
+    }
+    .border-lime {
+      border-color: #AAF335;
+    }
+    .border-darkpink {
+      border-color: #F877C1;
+    }
 
-    .text-pink { color: #ec4899; }
-    .text-green { color: #22c55e; }
-    .text-gray { color: #374151; font-size: 0.875rem; margin-top: 0.25rem; font-weight: 600; }
+    .text-pink {
+      color: #ec4899;
+    }
+    .text-green {
+      color: #22c55e;
+    }
+    .text-gray {
+      color: #374151;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      font-weight: 600;
+    }
 
     .card-icon {
       width: 2.5rem;
@@ -363,6 +391,7 @@
       width: 100%;
       overflow: hidden;
     }
+
     .map-container iframe {
       width: 100%;
       display: block;
@@ -387,6 +416,7 @@
       font-weight: bold;
       color: #1f2937;
     }
+
     .form-subtitle {
       margin-top: 0.5rem;
       font-size: 0.875rem;
@@ -405,7 +435,8 @@
       margin-bottom: 0.5rem;
     }
 
-    .form-input, .form-textarea {
+    .form-input,
+    .form-textarea {
       display: block;
       width: 100%;
       border-radius: 1rem;
@@ -416,14 +447,15 @@
       outline: none;
     }
 
-    .form-input:focus, .form-textarea:focus {
+    .form-input:focus,
+    .form-textarea:focus {
       border-color: #06b6d4;
       box-shadow: 0 0 0 2px #06b6d4;
     }
 
     .submit-btn {
       width: 100%;
-      background-color: #94a3b8; /* slate-400 */
+      background-color: #94a3b8;
       color: white;
       font-weight: bold;
       padding: 1rem 1.5rem;
@@ -435,10 +467,10 @@
     }
 
     .submit-btn:hover {
-      background-color: #64748b; /* slate-500 */
+      background-color: #64748b;
     }
 
-    /* === ICONS & MASKS (Dari kode aslimu) === */
+    /* === ICONS & MASKS === */
     .icon-mask {
       -webkit-mask-size: contain;
       mask-size: contain;
@@ -488,7 +520,7 @@
       width: 100%;
       margin-bottom: 2rem;
     }
-    
+
     @media (min-width: 768px) {
       .footer-brand {
         width: 25%;
@@ -502,7 +534,7 @@
       gap: 0.75rem;
       padding-top: 1.25rem;
     }
-    
+
     .social-icon-img {
       width: 1.75rem;
       height: 1.75rem;
@@ -531,7 +563,9 @@
       width: 100%;
     }
     @media (min-width: 768px) {
-      .footer-col { width: 33%; }
+      .footer-col {
+        width: 33%;
+      }
     }
 
     .footer-heading {
@@ -545,6 +579,7 @@
       display: block;
       line-height: 2;
     }
+
     .footer-link:hover {
       text-decoration: underline;
     }
@@ -556,7 +591,7 @@
       margin-bottom: 1rem;
     }
 
-    /* === INPUT NUMBER RESET (Dari kode aslimu) === */
+    /* === INPUT NUMBER RESET === */
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -569,44 +604,40 @@
 </head>
 
 <body>
-
-  <header id="navbar" class="navbar">
+  <header id="navbar" class="navbar theme-nav-hijau" data-current-theme="theme-nav-hijau">
     <div class="container nav-content">
       <div>
-        <img src="content/logo.png" alt="logo" class="logo-img" />
+        <img src="content/logo.png" alt="logo" class="logo" />
       </div>
 
-      <nav class="desktop-menu">
+      <nav class="nav-links">
         <a href="index.html">HOME</a>
-        <a href="about.html">ABOUT US</a>
+        <a href="about.html" >ABOUT US</a>
         <a href="product.html">PRODUCT</a>
-        <p class="menu-active">CONTACT</p>
+        <a href="contact.html" style="background-color: white">CONTACT</a>
       </nav>
 
-      <div class="lg:hidden flex items-center">
-        <button id="hamburger-button" class="hamburger-btn">
-          <span class="hamburger-span"></span>
-          <span class="hamburger-span"></span>
-          <span class="hamburger-span"></span>
+      <div class="lg-hidden">
+        <button id="hamburger-button" class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
       </div>
     </div>
   </header>
 
-  <div id="mobile-menu" class="mobile-menu">
-    <div class="mobile-menu-content">
-      <div class="mobile-header">
-        <h2 style="font-size: 1.5rem; font-weight: bold;">Menu</h2>
-        <button id="close-menu" class="close-btn">✕</button>
-      </div>
-
-      <a href="#" class="mobile-link">HOME</a>
-      <a href="#" class="mobile-link">ABOUT US</a>
-      <a href="#" class="mobile-link">PRODUCT</a>
-      <a href="#" class="mobile-link" style="border-bottom: none;">CONTACT</a>
-      
-      <hr style="opacity: 0.3; margin: 1.5rem 0;" />
+  <div id="mobile-menu" class="mobile-menu theme-menu-hijau theme-menu-text-hijau"
+    data-current-theme="theme-menu-hijau" data-current-text="theme-menu-text-hijau">
+    <div class="mobile-header">
+      <h2>Menu</h2>
+      <button id="close-menu" class="close-btn">✕</button>
     </div>
+
+    <a href="index.html" class="mobile-link">HOME</a>
+    <a href="#" class="mobile-link">ABOUT US</a>
+    <a href="p_orinuts.html" class="mobile-link">PRODUCT</a>
+    <a href="#" class="mobile-link">CONTACT</a>
   </div>
 
   <section class="hero-section">
@@ -629,7 +660,6 @@
 
     <div class="container">
       <div class="contact-grid">
-
         <div class="cards-container">
           <div class="cards-row">
             <div class="info-card border-pink">
@@ -652,7 +682,8 @@
           </div>
 
           <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d989.4189616679389!2d112.69222086956995!3d-7.277675899545579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fc18402c4a49%3A0xe27100c485d0e776!2sPerumahan%20Bavarian%20Village!5e0!3m2!1sid!2sid!4v1761877014298!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d989.4189616679389!2d112.69222086956995!3d-7.277675899545579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fc18402c4a49%3A0xe27100c485d0e776!2sPerumahan%20Bavarian%20Village!5e0!3m2!1sid!2sid!4v1761877014298!5m2!1sid!2sid" width="600" height="450" style="border:0;"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
         </div>
 
@@ -685,13 +716,12 @@
             </div>
           </form>
         </div>
-
       </div>
     </div>
   </section>
 
   <img src="content/sret/sret-orange.png" alt="sret orange" class="footer-sret" />
-  
+
   <footer>
     <div class="container">
       <img src="/content/logo.png" alt="Orinuts Logo" style="width: 8rem; margin-bottom: 1.5rem;" />
@@ -752,7 +782,9 @@
   </footer>
 
   <script>
-    // Navbar Scroll Effect
+    // ===================================
+    // 1. Navbar Scroll & Mobile Menu
+    // ===================================
     const navbar = document.getElementById("navbar");
     window.addEventListener("scroll", () => {
       if (window.scrollY > 50) {
@@ -762,14 +794,13 @@
       }
     });
 
-    // Hamburger Menu Logic
     const hamburgerButton = document.getElementById("hamburger-button");
     const mobileMenu = document.getElementById("mobile-menu");
     const closeMenuButton = document.getElementById("close-menu");
 
     function openMenu() {
-      mobileMenu.classList.add("active"); // Menggunakan class active untuk trigger transform
-      hamburgerButton.classList.add("open"); // Untuk animasi icon X
+      mobileMenu.classList.add("active");
+      hamburgerButton.classList.add("open");
     }
 
     function closeMenu() {
@@ -779,7 +810,18 @@
 
     hamburgerButton.addEventListener("click", openMenu);
     closeMenuButton.addEventListener("click", closeMenu);
+
+    // --- FITUR BARU: KLIK DI LUAR MENU UNTUK MENUTUP ---
+    document.addEventListener("click", (e) => {
+      if (!mobileMenu.classList.contains("active")) return;
+
+      if (
+        !mobileMenu.contains(e.target) &&
+        !hamburgerButton.contains(e.target)
+      ) {
+        closeMenu();
+      }
+    });
   </script>
 </body>
-
 </html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orinuts - Healthy Snack</title>
+    <style>
+      /* =========================================
+         1. RESET & GLOBAL STYLES
+         ========================================= */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        overflow-x: hidden;
+        width: 100%;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.3s;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      /* Container Utility */
+      .container {
+        width: 100%;
+        padding: 0 20px;
+        margin: 0 auto;
+      }
+
+      @media (min-width: 768px) {
+        .container { padding: 0 25px; }
+      }
+      @media (min-width: 1024px) {
+        .container { max-width: 1280px; padding: 0 20px; }
+      }
+
+      /* =========================================
+         2. NAVBAR (UKURAN SEDIKIT DIPERBESAR)
+         ========================================= */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        /* PERUBAHAN DISINI: Padding dinaikkan dari 8px ke 12px */
+        padding: 12px 0; 
+        transition: all 0.3s ease;
+        background-color: rgba(170, 243, 52, 0.8); 
+        backdrop-filter: blur(5px);
+      }
+
+      .navbar.shadow-lg {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        /* PERUBAHAN DISINI: Tinggi logo dinaikkan dari 50px ke 54px */
+        height: 54px; 
+      }
+
+      /* Menu Desktop */
+      .nav-links {
+        display: none;
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        padding: 5px 10px;
+        border-radius: 999px;
+      }
+
+      .nav-links a {
+        padding: 8px 32px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .nav-links a.active,
+      .nav-links a:hover {
+        background-color: #fff;
+        color: inherit;
+      }
+
+      /* Hamburger Button */
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 101;
+      }
+
+      .hamburger span {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: white;
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+
+      .hamburger.open span:nth-child(1) { transform: translateY(10px) rotate(45deg); }
+      .hamburger.open span:nth-child(2) { opacity: 0; }
+      .hamburger.open span:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
+
+      /* =========================================
+         MOBILE MENU
+         ========================================= */
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 85%;
+        max-width: 400px;
+        z-index: 200; 
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out, background-color 0.5s ease;
+        padding: 30px;
+        overflow-y: auto;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+      }
+
+      .mobile-menu.active { transform: translateX(0); }
+
+      .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+      
+      .mobile-header h2 { 
+        font-size: 24px; 
+        transition: color 0.3s;
+      }
+      
+      .close-btn { 
+        background: none; 
+        border: none; 
+        font-size: 32px; 
+        cursor: pointer; 
+        transition: color 0.3s;
+      }
+
+      .mobile-link {
+        display: block;
+        padding: 15px 0;
+        font-weight: 600;
+        font-size: 18px;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        transition: color 0.3s;
+      }
+
+      @media (min-width: 1024px) {
+        .nav-links { display: flex; }
+        .hamburger { display: none; }
+      }
+
+      
+    </style>
+  </head>
+
+  <body>
+    <div id="hero-section" class="hero-section theme-bg-hijau" data-current-theme="theme-bg-hijau">
+      
+      <header id="navbar" class="navbar theme-nav-hijau" data-current-theme="theme-nav-hijau">
+        <div class="container nav-content">
+          <div>
+            <img src="content/logo.png" alt="logo" class="logo" />
+          </div>
+
+          <nav class="nav-links">
+            <a href="index.html" style="background-color:white;">HOME</a>
+            <a href="about.html">ABOUT US</a>
+            <a href="product.html">PRODUCT</a>
+            <a href="contact.html">CONTACT</a>
+          </nav>
+
+          <div class="lg-hidden">
+            <button id="hamburger-button" class="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div id="mobile-menu" class="mobile-menu theme-menu-hijau theme-menu-text-hijau" data-current-theme="theme-menu-hijau" data-current-text="theme-menu-text-hijau">
+        <div class="mobile-header">
+          <h2>Menu</h2>
+          <button id="close-menu" class="close-btn">✕</button>
+        </div>
+
+        <a href="index.html" class="mobile-link">HOME</a>
+        <a href="#" class="mobile-link">ABOUT US</a>
+        <a href="p_orinuts.html" class="mobile-link">PRODUCT</a>
+        <a href="#" class="mobile-link">CONTACT</a>
+      </div>
+
+      
+    <script>
+      // ===================================
+      // 1. Navbar Scroll & Mobile Menu
+      // ===================================
+      const navbar = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add("shadow-lg");
+        } else {
+          navbar.classList.remove("shadow-lg");
+        }
+      });
+
+      const hamburgerButton = document.getElementById("hamburger-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const closeMenuButton = document.getElementById("close-menu");
+
+      function openMenu() {
+        mobileMenu.classList.add("active");
+        hamburgerButton.classList.add("open");
+      }
+      
+      function closeMenu() {
+        mobileMenu.classList.remove("active");
+        hamburgerButton.classList.remove("open");
+      }
+
+      hamburgerButton.addEventListener("click", openMenu);
+      closeMenuButton.addEventListener("click", closeMenu);
+
+      // --- FITUR BARU: KLIK DI LUAR MENU UNTUK MENUTUP ---
+      document.addEventListener("click", (e) => {
+        if (!mobileMenu.classList.contains("active")) return;
+
+        if (!mobileMenu.contains(e.target) && !hamburgerButton.contains(e.target)) {
+          closeMenu();
+        }
+      });
+
+      
+    </script>
+  </body>
+</html>
