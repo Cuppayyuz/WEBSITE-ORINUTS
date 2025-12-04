@@ -1,0 +1,18 @@
+1 : product nya ditampilkan semua dalam 1 section 
+2 : productnya hanya ditampilkan 4 dgn animasi dan ada tombol yang ketika dipencet ada pages all product
+     dan  bsia memesan dgn fitur keranjang
+
+
+
+
+     <div class="absolute w-100 h-100 -left-10 bg-[#82BBC9] rounded-full blur-[100px] z-0"></div>
+    <div class="absolute w-100 h-100 right-30 top-290 bg-[#82BBC9] rounded-full blur-[100px] -z-10"></div>
+    <div class="absolute w-100 h-100 left-10 top-665 bg-[#F876C1] rounded-full blur-[100px] z-0"></div>
+    <div class="absolute w-100 h-100 right-30 top-580 bg-[#F876C1] rounded-full blur-[100px] -z-10"></div>
+    <div class="absolute w-100 h-100 left-50 -bottom-890 bg-[#ECE856] rounded-full blur-[100px] z-0"></div>
+    <div class="absolute w-100 h-100 right-30 -bottom-810 bg-[#0300A6] opacity-90 rounded-full blur-[100px] -z-10">
+    </div>
+    <div class="absolute w-100 h-100 -left-25 -bottom-1200 bg-[#78B0F1] rounded-full blur-[100px] z-0"></div>
+    <div class="absolute w-100 h-100 right-65 -bottom-1140 bg-[#78B0F1] rounded-full blur-[100px] -z-10"></div>
+    <div class="absolute w-100 h-100 left-25 -bottom-1490 bg-[#FA7268] rounded-full blur-[100px] z-0"></div>
+    <div class="absolute w-100 h-100 right-30 -bottom-1550 bg-[#FA7268] rounded-full blur-[100px] -z-10"></div>

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orinuts - Delicious Snacks</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#78350f", // amber-900
+              secondary: "#F0A27C",
+            },
+            screens: {
+              sm: "640px",
+              md: "768px",
+              lg: "1024px",
+              xl: "1440px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Hamburger Animation */
+      #hamburger-button span {
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+      #hamburger-button.open span:nth-child(1) {
+        transform: translateY(10px) rotate(45deg);
+      }
+      #hamburger-button.open span:nth-child(2) {
+        opacity: 0;
+      }
+      #hamburger-button.open span:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
+      }
+      .category-filter-btn.active-filter {
+        background-color: #78350f;
+        color: white;
+      }
+
+      /* Scrollbar untuk keranjang agar rapi */
+      .cart-scroll::-webkit-scrollbar {
+        width: 6px;
+      }
+      .cart-scroll::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+
+  <body class="bg-[#F0A27C] w-full">
+    <header
+      id="navbar"
+      class="fixed left-0 right-0 top-0 z-50 py-2 transition-all duration-300 backdrop-blur-sm"
+    >
+      <div
+        class="container mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between lg:justify-normal"
+      >
+        <div>
+          <img
+            src="content/logo.png"
+            alt="logo"
+            class="h-10 md:h-14 w-auto lg:ml-13"
+          />
+        </div>
+
+        <nav
+          class="hidden lg:flex py-1 ml-80 rounded-full bg-white/30 backdrop-blur-md"
+        >
+          <a
+            href="index.html"
+            class="rounded-full py-2 px-8 font-semibold hover:text-green-700"
+            >HOME</a
+          >
+          <a
+            href="about.html"
+            class="rounded-full py-2 px-8 font-semibold hover:text-green-700"
+            >ABOUT US</a
+          >
+          <a
+            href="product.html"
+            class="rounded-full py-2 px-8 font-semibold hover:text-green-700"
+            >PRODUCT</a
+          >
+          <a
+            href="contact.html"
+            class="rounded-full py-2 px-8 font-semibold hover:text-green-700"
+            >CONTACT</a
+          >
+        </nav>
+
+        <div class="lg:hidden flex items-center">
+          <button
+            id="hamburger-button"
+            class="relative z-[60] w-8 h-6 flex flex-col justify-between items-center focus:outline-none p-1 md:w-10 md:h-8"
+          >
+            <span class="block w-full h-0.75 bg-white"></span>
+            <span class="block w-full h-0.75 bg-white"></span>
+            <span class="block w-full h-0.75 bg-white"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div
+      id="mobile-menu"
+      class="lg:hidden fixed top-0 right-0 h-full w-3/4 max-w-sm bg-green-500 transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto"
+    >
+      <div class="p-8">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-2xl font-bold text-white">Menu</h2>
+          <button
+            id="close-menu"
+            class="text-white hover:text-gray-300 text-3xl"
+          >
+            ✕
+          </button>
+        </div>
+
+        <a
+          href="index.html"
+          class="block py-3 text-white font-semibold hover:text-green-800 border-b border-white/30"
+          >HOME</a
+        >
+        <a
+          href="#"
+          class="block py-3 text-white font-semibold hover:text-green-800 border-b border-white/30"
+          >ABOUT US</a
+        >
+        <a
+          href="p_orinuts.html"
+          class="block py-3 text-white font-semibold hover:text-green-800 border-b border-white/30"
+          >PRODUCT</a
+        >
+        <a
+          href="#"
+          class="block py-3 text-white font-semibold hover:text-green-800"
+          >CONTACT</a
+        >
+      </div>
+    </div>
+
+    <div class="container mx-auto px-6 md:px-16 mt-28">
+      <section class="flex justify-center items-center gap-4">
+        <div class="relative w-full md:w-2/3 lg:w-1/2">
+          <div
+            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+          >
+            <svg
+              class="h-6 w-6 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Cari produk..."
+            class="h-12 w-full bg-white rounded-3xl pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-amber-600 shadow-sm"
+          />
+        </div>
+
+        <button
+          id="cart-toggle-btn"
+          class="relative h-12 w-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md hover:scale-105 transition-all group"
+        >
+          <svg
+            class="w-6 h-6 text-amber-800"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+            ></path>
+          </svg>
+          <span
+            id="cart-badge"
+            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full hidden"
+            >0</span
+          >
+        </button>
+      </section>
+
+      <section class="mt-6">
+        <div class="relative h-12 flex items-center">
+          <button
+            id="category-toggle"
+            class="absolute left-0 top-0 h-12 w-48 bg-white rounded-full flex items-center justify-center font-semibold shadow-sm transition-all duration-300 z-20 group text-amber-900"
+          >
+            <span>Category</span>
+            <svg
+              class="w-5 h-5 ml-2 transition-transform duration-300"
+              id="category-arrow"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+
+          <div
+            id="category-list"
+            class="flex items-center h-12 bg-white rounded-full shadow-sm z-10 transform scale-x-0 opacity-0 origin-left transition-all duration-500 ease-in-out w-full max-w-2xl overflow-hidden"
+          >
+            <div
+              class="flex items-center pl-52 pr-4 space-x-2 overflow-x-auto no-scrollbar"
+            >
+              <button
+                data-filter="all"
+                class="category-filter-btn active-filter px-4 py-1 rounded-full font-medium text-sm whitespace-nowrap"
+              >
+                All
+              </button>
+              <button
+                data-filter="Orinuts"
+                class="category-filter-btn px-4 py-1 rounded-full font-medium text-gray-700 hover:bg-gray-100 text-sm whitespace-nowrap"
+              >
+                Orinuts
+              </button>
+              <button
+                data-filter="Orimond"
+                class="category-filter-btn px-4 py-1 rounded-full font-medium text-gray-700 hover:bg-gray-100 text-sm whitespace-nowrap"
+              >
+                Orimond
+              </button>
+              <button
+                data-filter="Orithin"
+                class="category-filter-btn px-4 py-1 rounded-full font-medium text-gray-700 hover:bg-gray-100 text-sm whitespace-nowrap"
+              >
+                Orithin
+              </button>
+              <button
+                data-filter="Rumah Mente"
+                class="category-filter-btn px-4 py-1 rounded-full font-medium text-gray-700 hover:bg-gray-100 text-sm whitespace-nowrap"
+              >
+                Rumah Mente
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-10">
+        <h1 id="category-display" class="font-bold text-3xl text-amber-900">
+          All Products
+        </h1>
+      </section>
+
+      <section class="mt-6 mb-20">
+        <div
+          id="product-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <div
+            class="product-card bg-stone-50 rounded-xl shadow-lg p-4 flex flex-col transition-all duration-300 hover:shadow-xl"
+            data-category="Orimond"
+          >
+            <img
+              src="content/product/Orimond_bubble_gum.png"
+              alt="Orimond Bubble Gum"
+              class="w-full h-56 object-contain rounded-t-lg mb-4"
+            />
+            <div class="flex-grow">
+              <h3 class="text-xl font-bold text-amber-800 product-title">
+                Orimond Bubble Gum
+              </h3>
+              <div class="flex justify-between items-center mt-2">
+                <p class="text-lg font-semibold text-gray-900 product-price">
+                  Rp. 50.000
+                </p>
+              </div>
+              <p class="text-gray-500 text-sm mt-2 line-clamp-2">
+                Perpaduan kacang almond premium dengan rasa bubble gum yang
+                unik.
+              </p>
+            </div>
+
+            <div class="mt-5 flex space-x-2">
+              <button
+                class="view-product-btn flex-1 bg-gray-200 text-gray-800 py-2.5 px-4 rounded-full text-sm font-semibold flex items-center justify-center space-x-1.5 hover:bg-gray-300 transition-colors"
+                data-name="Orimond Bubble Gum"
+                data-price="50000"
+                data-img="content/product/Orimond_bubble_gum.png"
+                data-category="Orimond"
+                data-description="Nikmati sensasi unik dari Orimond Bubble Gum. Kacang almond panggang berkualitas tinggi yang dibalut dengan rasa permen karet (bubble gum) yang manis dan aromatik. Camilan sehat namun menyenangkan, cocok untuk menemani waktu santai atau sebagai mood booster harianmu. Bebas pengawet dan kaya akan serat."
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
+                <span>Lihat Produk</span>
+              </button>
+
+              <button
+                class="add-to-cart-btn flex-1 bg-amber-800 text-white py-2.5 px-4 rounded-full text-sm font-semibold flex items-center justify-center space-x-1.5 hover:bg-amber-900 transition-colors"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16">
+                  <path
+                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                  ></path>
+                </svg>
+                <span>Order Now</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="product-card bg-stone-50 rounded-xl shadow-lg p-4 flex flex-col transition-all duration-300 hover:shadow-xl"
+            data-category="Orinuts"
+          >
+            <img
+              src="https://placehold.co/400x400/png?text=Orinuts+Original"
+              alt="Orinuts Original"
+              class="w-full h-56 object-contain rounded-t-lg mb-4"
+            />
+            <div class="flex-grow">
+              <h3 class="text-xl font-bold text-amber-800 product-title">
+                Orinuts Original
+              </h3>
+              <div class="flex justify-between items-center mt-2">
+                <p class="text-lg font-semibold text-gray-900 product-price">
+                  Rp. 25.000
+                </p>
+              </div>
+              <p class="text-gray-500 text-sm mt-2 line-clamp-2">
+                Kacang mete original dengan sedikit garam laut.
+              </p>
+            </div>
+            <div class="mt-5 flex space-x-2">
+              <button
+                class="view-product-btn flex-1 bg-gray-200 text-gray-800 py-2.5 px-4 rounded-full text-sm font-semibold flex items-center justify-center space-x-1.5 hover:bg-gray-300 transition-colors"
+                data-name="Orinuts Original"
+                data-price="25000"
+                data-img="https://placehold.co/400x400/png?text=Orinuts+Original"
+                data-category="Orinuts"
+                data-description="Orinuts Original menghadirkan rasa asli kacang mete pilihan yang dipanggang sempurna. Tanpa minyak berlebih, dibumbui dengan sedikit garam laut alami untuk menonjolkan rasa gurih alami kacang. Sumber protein nabati yang sangat baik untuk camilan dietmu."
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
+                <span>Lihat Produk</span>
+              </button>
+              <button
+                class="add-to-cart-btn flex-1 bg-amber-800 text-white py-2.5 px-4 rounded-full text-sm font-semibold flex items-center justify-center space-x-1.5 hover:bg-amber-900 transition-colors"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16">
+                  <path
+                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                  ></path>
+                </svg>
+                <span>Order Now</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="product-modal" class="fixed inset-0 z-[110] hidden">
+      <div
+        id="product-backdrop"
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+      ></div>
+
+      <div
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl px-4"
+      >
+        <div
+          class="bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up relative flex flex-col md:flex-row max-h-[90vh] overflow-y-auto md:overflow-visible"
+        >
+          <button
+            id="close-product-modal"
+            class="absolute top-4 right-4 z-10 bg-white/50 hover:bg-white text-gray-800 rounded-full p-2 transition"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+
+          <div
+            class="w-full md:w-1/2 bg-stone-100 flex items-center justify-center p-8"
+          >
+            <img
+              id="modal-product-img"
+              src=""
+              alt="Detail Produk"
+              class="max-h-64 md:max-h-96 object-contain drop-shadow-xl transition-transform duration-500 hover:scale-105"
+            />
+          </div>
+
+          <div class="w-full md:w-1/2 p-8 flex flex-col">
+            <span
+              id="modal-product-category"
+              class="text-sm font-bold text-amber-600 tracking-wider uppercase mb-2"
+              >Category</span
+            >
+            <h2
+              id="modal-product-title"
+              class="text-3xl font-bold text-gray-900 mb-4 leading-tight"
+            >
+              Product Name
+            </h2>
+
+            <div class="flex items-center mb-6">
+              <span
+                id="modal-product-price"
+                class="text-2xl font-bold text-amber-800"
+                >Rp 0</span
+              >
+            </div>
+
+            <div
+              class="prose prose-sm text-gray-600 mb-8 flex-grow overflow-y-auto max-h-40 pr-2"
+            >
+              <p id="modal-product-desc">
+                Deskripsi produk akan muncul di sini.
+              </p>
+            </div>
+
+            <div class="mt-auto pt-6 border-t border-gray-100">
+              <button
+                id="modal-add-to-cart"
+                class="w-full bg-amber-800 text-white font-bold py-4 rounded-xl hover:bg-amber-900 transition flex justify-center items-center gap-2 shadow-lg hover:shadow-amber-800/30 transform active:scale-95 duration-200"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 16 16">
+                  <path
+                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                  ></path>
+                </svg>
+                Masukkan Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cart-modal" class="fixed inset-0 z-[100] hidden">
+      <div
+        id="cart-backdrop"
+        class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+      ></div>
+
+      <div
+        class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform transition-transform duration-300 flex flex-col"
+      >
+        <div
+          class="p-4 bg-amber-800 text-white flex justify-between items-center shadow-md"
+        >
+          <h2 class="text-xl font-bold flex items-center gap-2">
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+              ></path>
+            </svg>
+            Keranjang Belanja
+          </h2>
+          <button id="close-cart" class="hover:text-amber-200 transition">
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 cart-scroll bg-gray-50">
+          <div id="cart-items-container" class="space-y-4">
+            <p class="text-center text-gray-500 mt-10">
+              Keranjang kamu masih kosong.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="p-4 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
+        >
+          <div class="flex items-center mb-4">
+            <input
+              type="checkbox"
+              id="select-all-cart"
+              class="w-4 h-4 text-amber-600 rounded focus:ring-amber-500 border-gray-300"
+            />
+            <label
+              for="select-all-cart"
+              class="ml-2 text-sm font-medium text-gray-700"
+              >Pilih Semua</label
+            >
+          </div>
+          <div class="flex justify-between items-end mb-4">
+            <span class="text-gray-600 text-sm">Total Pembayaran:</span>
+            <span
+              id="cart-total-price"
+              class="text-2xl font-bold text-amber-800"
+              >Rp. 0</span
+            >
+          </div>
+          <button
+            class="w-full bg-amber-800 text-white font-bold py-3 rounded-xl hover:bg-amber-900 transition flex justify-center items-center gap-2 shadow-lg"
+          >
+            Checkout Sekarang
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        // --- DATA & STATE ---
+        let cart = [];
+        // Variable untuk menyimpan data produk yang sedang dilihat di modal
+        let currentModalProduct = null;
+
+        // --- DOM ELEMENTS (Main) ---
+        const navbar = document.getElementById("navbar");
+        const hamburgerButton = document.getElementById("hamburger-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const closeMenuButton = document.getElementById("close-menu");
+
+        // Category & Search
+        const categoryToggle = document.getElementById("category-toggle");
+        const categoryList = document.getElementById("category-list");
+        const categoryArrow = document.getElementById("category-arrow");
+        const filterButtons = document.querySelectorAll(".category-filter-btn");
+        const productGrid = document.getElementById("product-grid");
+        const searchInput = document.getElementById("search-input");
+        const categoryDisplay = document.getElementById("category-display");
+        const productCards = document.querySelectorAll(".product-card");
+
+        // Cart System Elements
+        const cartToggleBtn = document.getElementById("cart-toggle-btn");
+        const cartModal = document.getElementById("cart-modal");
+        const closeCartBtn = document.getElementById("close-cart");
+        const cartBackdrop = document.getElementById("cart-backdrop");
+        const cartItemsContainer = document.getElementById(
+          "cart-items-container"
+        );
+        const cartTotalPrice = document.getElementById("cart-total-price");
+        const cartBadge = document.getElementById("cart-badge");
+        const selectAllCheckbox = document.getElementById("select-all-cart");
+
+        // Product Detail Modal Elements
+        const productModal = document.getElementById("product-modal");
+        const productBackdrop = document.getElementById("product-backdrop");
+        const closeProductModalBtn = document.getElementById(
+          "close-product-modal"
+        );
+        const modalImg = document.getElementById("modal-product-img");
+        const modalCategory = document.getElementById("modal-product-category");
+        const modalTitle = document.getElementById("modal-product-title");
+        const modalPrice = document.getElementById("modal-product-price");
+        const modalDesc = document.getElementById("modal-product-desc");
+        const modalAddToCartBtn = document.getElementById("modal-add-to-cart");
+
+        // --- HELPER FUNCTIONS ---
+        const formatRupiah = (number) => {
+          return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+          }).format(number);
+        };
+
+        // --- CART LOGIC ---
+        function updateCartUI() {
+          const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+          if (totalItems > 0) {
+            cartBadge.classList.remove("hidden");
+            cartBadge.textContent = totalItems;
+          } else {
+            cartBadge.classList.add("hidden");
+          }
+
+          cartItemsContainer.innerHTML = "";
+
+          if (cart.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 opacity-60">
+                     <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <p class="text-gray-500 font-medium">Keranjang kamu kosong.</p>
+                </div>`;
+            cartTotalPrice.textContent = formatRupiah(0);
+            selectAllCheckbox.checked = false;
+            return;
+          }
+
+          let totalPrice = 0;
+          let allSelected = true;
+
+          cart.forEach((item, index) => {
+            if (item.selected) {
+              totalPrice += item.price * item.qty;
+            } else {
+              allSelected = false;
+            }
+
+            const itemHTML = `
+            <div class="flex items-center bg-white p-3 rounded-lg shadow-sm border border-gray-100 gap-3 transition hover:shadow-md">
+                <input type="checkbox" class="cart-item-select w-5 h-5 text-amber-600 rounded focus:ring-amber-500 border-gray-300" 
+                    data-index="${index}" ${item.selected ? "checked" : ""}>
+                
+                <img src="${item.image}" alt="${
+              item.name
+            }" class="w-16 h-16 object-cover rounded-md bg-gray-100">
+                
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-bold text-gray-800 truncate">${
+                      item.name
+                    }</h4>
+                    <p class="text-amber-700 font-semibold text-sm">${formatRupiah(
+                      item.price
+                    )}</p>
+                </div>
+
+                <div class="flex flex-col items-end gap-2">
+                     <button class="text-gray-400 hover:text-red-500 transition delete-item-btn" data-index="${index}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                    <div class="flex items-center border border-gray-300 rounded-full overflow-hidden">
+                        <button class="px-2 py-0.5 bg-gray-50 hover:bg-gray-200 text-gray-600 decrease-qty" data-index="${index}">-</button>
+                        <span class="px-2 text-xs font-bold text-gray-700 min-w-[20px] text-center bg-white">${
+                          item.qty
+                        }</span>
+                        <button class="px-2 py-0.5 bg-gray-50 hover:bg-gray-200 text-gray-600 increase-qty" data-index="${index}">+</button>
+                    </div>
+                </div>
+            </div>
+            `;
+            cartItemsContainer.insertAdjacentHTML("beforeend", itemHTML);
+          });
+
+          cartTotalPrice.textContent = formatRupiah(totalPrice);
+          selectAllCheckbox.checked = cart.length > 0 && allSelected;
+
+          attachCartEvents();
+        }
+
+        // Fungsi Add Item ke Array Cart (Digunakan oleh tombol Grid maupun Modal)
+        function addItemToCart(name, price, image) {
+          const existingItem = cart.find((item) => item.name === name);
+
+          if (existingItem) {
+            existingItem.qty++;
+          } else {
+            cart.push({
+              name: name,
+              price: parseInt(price),
+              image: image,
+              qty: 1,
+              selected: true,
+            });
+          }
+
+          updateCartUI();
+          cartModal.classList.remove("hidden"); // Buka keranjang otomatis
+          productModal.classList.add("hidden"); // Tutup modal produk jika terbuka
+        }
+
+        function attachCartEvents() {
+          document.querySelectorAll(".cart-item-select").forEach((cb) => {
+            cb.addEventListener("change", (e) => {
+              const index = e.target.dataset.index;
+              cart[index].selected = e.target.checked;
+              updateCartUI();
+            });
+          });
+
+          document.querySelectorAll(".increase-qty").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              cart[e.target.dataset.index].qty++;
+              updateCartUI();
+            });
+          });
+
+          document.querySelectorAll(".decrease-qty").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const index = e.target.dataset.index;
+              if (cart[index].qty > 1) {
+                cart[index].qty--;
+                updateCartUI();
+              }
+            });
+          });
+
+          document.querySelectorAll(".delete-item-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              cart.splice(e.target.dataset.index, 1);
+              updateCartUI();
+            });
+          });
+        }
+
+        // --- PRODUCT DETAIL MODAL LOGIC ---
+        function openProductModal(btn) {
+          // Ambil data dari atribut tombol
+          const name = btn.getAttribute("data-name");
+          const price = btn.getAttribute("data-price");
+          const img = btn.getAttribute("data-img");
+          const desc = btn.getAttribute("data-description");
+          const category = btn.getAttribute("data-category");
+
+          // Isi konten modal
+          modalTitle.textContent = name;
+          modalPrice.textContent = formatRupiah(price);
+          modalImg.src = img;
+          modalDesc.textContent = desc;
+          modalCategory.textContent = category;
+
+          // Simpan data produk saat ini ke variabel global (untuk tombol add to cart di dalam modal)
+          currentModalProduct = { name, price, img };
+
+          // Tampilkan modal
+          productModal.classList.remove("hidden");
+        }
+
+        // --- EVENT LISTENERS ---
+
+        // 1. Navbar & Mobile Menu
+        window.addEventListener("scroll", () =>
+          navbar.classList.toggle("shadow-lg", window.scrollY > 50)
+        );
+        hamburgerButton.addEventListener("click", () =>
+          mobileMenu.classList.remove("translate-x-full")
+        );
+        closeMenuButton.addEventListener("click", () =>
+          mobileMenu.classList.add("translate-x-full")
+        );
+
+        // 2. Category Toggle
+        categoryToggle.addEventListener("click", () => {
+          const isOpen = categoryList.classList.contains("scale-x-100");
+          categoryList.classList.toggle("scale-x-0", isOpen);
+          categoryList.classList.toggle("opacity-0", isOpen);
+          categoryList.classList.toggle("scale-x-100", !isOpen);
+          categoryList.classList.toggle("opacity-100", !isOpen);
+          categoryArrow.style.transform = isOpen
+            ? "rotate(0deg)"
+            : "rotate(180deg)";
+        });
+
+        // 3. Filter Logic
+        function filterProducts() {
+          const searchTerm = searchInput.value.toLowerCase().trim();
+          let currentCategoryFilter = document
+            .querySelector(".category-filter-btn.active-filter")
+            .getAttribute("data-filter");
+          let visibleCount = 0;
+
+          productCards.forEach((card) => {
+            const productName = card
+              .querySelector(".product-title")
+              .textContent.toLowerCase();
+            const productCategory = card.getAttribute("data-category");
+            const matchCategory =
+              currentCategoryFilter === "all" ||
+              productCategory === currentCategoryFilter;
+            const matchSearch =
+              searchTerm === "" || productName.includes(searchTerm);
+
+            if (matchCategory && matchSearch) {
+              card.classList.remove("hidden");
+              card.classList.add("flex");
+              visibleCount++;
+            } else {
+              card.classList.add("hidden");
+              card.classList.remove("flex");
+            }
+          });
+
+          let noResultMsg = document.getElementById("no-result-message");
+          if (visibleCount === 0) {
+            if (!noResultMsg) {
+              noResultMsg = document.createElement("p");
+              noResultMsg.id = "no-result-message";
+              noResultMsg.className =
+                "col-span-full text-center text-gray-600 py-8 font-semibold text-lg";
+              noResultMsg.textContent = "Produk tidak ditemukan.";
+              productGrid.appendChild(noResultMsg);
+            }
+          } else {
+            if (noResultMsg) noResultMsg.remove();
+          }
+        }
+
+        let searchTimeout = null;
+        searchInput.addEventListener("input", () => {
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(filterProducts, 300);
+        });
+
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            filterButtons.forEach((btn) => {
+              btn.classList.remove(
+                "active-filter",
+                "bg-amber-800",
+                "text-white"
+              );
+              btn.classList.add("text-gray-700", "hover:bg-gray-100");
+            });
+            button.classList.add("active-filter", "bg-amber-800", "text-white");
+            button.classList.remove("text-gray-700", "hover:bg-gray-100");
+            categoryDisplay.textContent =
+              button.textContent.trim() === "All"
+                ? "All Products"
+                : button.textContent.trim();
+            filterProducts();
+          });
+        });
+
+        // 4. Cart UI Events
+        cartToggleBtn.addEventListener("click", () =>
+          cartModal.classList.remove("hidden")
+        );
+        const closeCart = () => cartModal.classList.add("hidden");
+        closeCartBtn.addEventListener("click", closeCart);
+        cartBackdrop.addEventListener("click", closeCart);
+
+        selectAllCheckbox.addEventListener("change", (e) => {
+          const isChecked = e.target.checked;
+          cart.forEach((item) => (item.selected = isChecked));
+          updateCartUI();
+        });
+
+        // 5. Product Grid Events (Delegate Event untuk performa)
+        // Kita pasang listener di container parent (productGrid)
+        productGrid.addEventListener("click", (e) => {
+          // Handle Klik tombol Order Now
+          const orderBtn = e.target.closest(".add-to-cart-btn");
+          if (orderBtn) {
+            // Karena tombol order now sekarang tidak punya data lengkap, kita ambil dari tombol view-product di sebelahnya
+            // ATAU ambil dari parent element seperti kode sebelumnya
+            const card = orderBtn.closest(".product-card");
+            const viewBtn = card.querySelector(".view-product-btn");
+
+            const name = viewBtn.getAttribute("data-name");
+            const price = viewBtn.getAttribute("data-price");
+            const img = viewBtn.getAttribute("data-img");
+
+            addItemToCart(name, price, img);
+            return;
+          }
+
+          // Handle Klik tombol Lihat Produk
+          const viewBtn = e.target.closest(".view-product-btn");
+          if (viewBtn) {
+            openProductModal(viewBtn);
+          }
+        });
+
+        // 6. Product Modal Events
+        const closeProductModal = () => productModal.classList.add("hidden");
+        closeProductModalBtn.addEventListener("click", closeProductModal);
+        productBackdrop.addEventListener("click", closeProductModal);
+
+        // Tombol Add to Cart di dalam Modal
+        modalAddToCartBtn.addEventListener("click", () => {
+          if (currentModalProduct) {
+            addItemToCart(
+              currentModalProduct.name,
+              currentModalProduct.price,
+              currentModalProduct.img
+            );
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
