@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Product Orinuts - Animated</title>
+    <title>Product Orinuts - Full Card Animation</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
       html,
@@ -13,6 +13,7 @@
         overflow-x: hidden;
         margin: 0;
         padding: 0;
+        scroll-behavior: smooth;
       }
       .produk-meja {
         filter: drop-shadow(-2px 10px 3px rgba(0, 0, 0, 0.3));
@@ -23,13 +24,17 @@
 
       /* Bentuk Trapesium Background */
       .trapr {
-        clip-path: polygon(0% 25%, 100% 0%, 100% 100%, 0% 75%);
+        clip-path: polygon(
+          0% 50%,
+          35% 0%,
+          100% 0%,
+          100% 100%,
+          35% 100%,
+          0% 50%
+        );
       }
       .trapl {
-        clip-path: polygon(0% 0%, 100% 25%, 100% 100%, 0% 100%);
-      }
-      .trapr-bfull {
-        clip-path: polygon(0% 25%, 100% 0%, 100% 100%, 0% 100%);
+        clip-path: polygon(65% 0%, 100% 50%, 65% 100%, 0% 100%, 0% 0%);
       }
 
       /* Shadow & Header */
@@ -54,36 +59,35 @@
         transform: translateY(-10px) rotate(-45deg);
       }
 
-      /* --- CUSTOM ANIMATION CLASSES --- */
-      .card-content {
-        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-          opacity 0.8s ease;
+      /* --- ANIMATION LOGIC (UPDATED) --- */
+      /* Kita menggerakkan .anim-wrapper sekarang, bukan hanya kontennya */
+
+      .anim-wrapper {
+        transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease;
         opacity: 1;
         transform: translateX(0);
+        position: relative;
+        width: 100%;
+        height: 100%;
       }
 
-      /* Keluar/Masuk Kiri */
-      .slide-out-left {
-        transform: translateX(-150%);
+      /* State 1: Exit (Keluar) */
+      .exit-to-left {
+        transform: translateX(-100%); /* Geser full ke kiri */
         opacity: 0;
       }
-      .slide-in-start-left {
-        transform: translateX(150%);
-        opacity: 0;
-      } /* Posisi awal sebelum masuk dari kanan (seolah loop) atau balik dari kiri */
-
-      /* Keluar/Masuk Kanan */
-      .slide-out-right {
-        transform: translateX(150%);
-        opacity: 0;
-      }
-      .slide-in-start-right {
-        transform: translateX(-150%);
+      .exit-to-right {
+        transform: translateX(100%); /* Geser full ke kanan */
         opacity: 0;
       }
 
-      /* Helper untuk menyembunyikan sementara saat swap data */
-      .invisible-card {
+      /* State 2: Start Position (Posisi Awal Masuk) - Tanpa Transisi */
+      .enter-from-right {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      .enter-from-left {
+        transform: translateX(100%);
         opacity: 0;
       }
     </style>
@@ -187,29 +191,13 @@
       <img
         src="content/kacang/biji_labu.png"
         alt="bijilabu"
-        class="floating-nut absolute h-auto w-20 rotate-180 -top-20 left-123"
+        class="absolute h-auto w-20 rotate-180 -top-20 left-123"
       />
       <img
         src="content/kacang/kuaci.png"
         alt="kuaci"
-        class="floating-nut absolute h-auto w-30 -rotate-33 top-20 left-20"
+        class="absolute h-auto w-30 -rotate-33 top-20 left-20"
       />
-      <img
-        src="content/kacang/almond1-removebg-preview.png"
-        alt="almond"
-        class="floating-nut absolute h-auto w-40 -top-5 right-23 -rotate-15 blur-[2px]"
-      />
-      <img
-        src="content/kacang/kismis.png"
-        alt="kismis"
-        class="floating-nut absolute h-auto w-20 top-85 left-25 rotate-45"
-      />
-      <img
-        src="content/kacang/mente.png"
-        alt="mente"
-        class="floating-nut absolute h-auto w-80 top-60 right-5 rotate-180 blur-[1px]"
-      />
-
       <img
         src="content/trapesium-removebg-preview.png"
         alt="trapsium"
@@ -226,16 +214,6 @@
         alt="produc1"
         class="produk-meja absolute h-auto w-50 top-85 z-20"
       />
-      <img
-        src="content/product/Orimond_Honey_Butter_Almond_75g-removebg-preview.png"
-        alt="produc2"
-        class="produk-meja absolute h-auto w-35 top-110 right-160 z-20"
-      />
-      <img
-        src="content/product/Orimond_seaweed.png"
-        alt="produc3"
-        class="produk-meja absolute h-auto w-40 top-95 right-148 z-10"
-      />
       <div class="w-full bg-gray-500 h-9 absolute top-169 z-40 blur-3xl"></div>
     </div>
 
@@ -249,54 +227,57 @@
       <div
         class="absolute w-100 h-100 right-30 top-290 bg-[#82BBC9] rounded-full blur-[100px] -z-10"
       ></div>
-      <div
-        class="absolute w-100 h-100 left-10 top-665 bg-[#F876C1] rounded-full blur-[100px] z-0"
-      ></div>
-      <div
-        class="absolute w-100 h-100 right-30 top-580 bg-[#F876C1] rounded-full blur-[100px] -z-10"
-      ></div>
 
-      <div id="card-orinuts" class="relative w-full overflow-hidden py-10">
-        <div
-          class="card-content flex flex-col md:flex-row items-center justify-center px-10 md:px-30 h-165 space-x-0 md:space-x-10"
-        >
-          <img
-            id="img-orinuts"
-            src="content/product/Orinuts_Roasted_Cashew_Original_200g-removebg-preview.png"
-            alt="Product Image"
-            class="img-shadow h-100 md:h-135 object-contain transition-all duration-500"
-          />
-          <div class="max-w-xl">
-            <h2
-              id="title-orinuts"
-              class="text-4xl font-extrabold mb-6 font-inter uppercase tracking-[7px] text-[#4A2311]"
-            >
-              Roasted Cashew
-            </h2>
-            <p
-              id="desc-orinuts"
-              class="font-medium font-poppins tracking-[1px] text-[18px] uppercase mt-2 text-gray-800"
-            >
-              Kacang mete, Almond, Sunflower, pumpkin...
-            </p>
-            <ul
-              class="list-disc list-inside font-bold font-poppins py-5 tracking-[1px] text-gray-700"
-            >
-              <li>Premium Quality.</li>
-              <li>Rasa FRESH & ENAK.</li>
-              <li>Sudah matang & siap dimakan.</li>
-            </ul>
-            <hr class="py-3 border-gray-400" />
-            <div class="flex justify-between items-center p-5">
-              <h3 class="text-2xl font-semibold text-black font-poppins">
-                Rp. 70,000
-              </h3>
-              <a
-                href="allproduct.html"
-                class="flex items-center space-x-3 bg-[#4A2311] text-white font-bold py-3 px-6 rounded-full font-inter hover:bg-[#6b341a] transition"
+      <div id="card-orinuts" class="relative w-full overflow-hidden">
+        <div class="anim-wrapper py-10">
+          <div
+            id="bg-orinuts"
+            class="trapl absolute inset-0 w-full h-full bg-gradient-to-b to-[#D8140F] from-[#ED7B01] z-0 transition-colors duration-700"
+          ></div>
+          <div
+            class="card-content relative z-10 flex flex-col md:flex-row items-center justify-center px-10 md:px-30 h-165 space-x-0 md:space-x-10"
+          >
+            <img
+              id="img-orinuts"
+              src="content/product/Orinuts_Roasted_Cashew_Original_200g-removebg-preview.png"
+              alt="Orinuts Image"
+              class="img-shadow h-100 md:h-135 object-contain"
+            />
+            <div class="max-w-xl">
+              <h2
+                id="title-orinuts"
+                class="text-4xl font-extrabold mb-6 font-inter uppercase tracking-[7px] text-[#4A2311]"
               >
-                <span>Order Now</span>
-              </a>
+                Roasted Cashew
+              </h2>
+              <p
+                id="desc-orinuts"
+                class="font-medium font-poppins tracking-[1px] text-[18px] uppercase mt-2 text-gray-800"
+              >
+                Kacang mete, Almond, Sunflower, pumpkin...
+              </p>
+              <ul
+                class="list-disc list-inside font-bold font-poppins py-5 tracking-[1px] text-gray-700"
+              >
+                <li>Premium Quality.</li>
+                <li>Rasa FRESH & ENAK.</li>
+                <li>Sudah matang & siap dimakan.</li>
+              </ul>
+              <hr class="py-3 border-gray-400" />
+              <div class="flex justify-between items-center p-5">
+                <h3
+                  id="price-orinuts"
+                  class="text-2xl font-semibold text-black font-poppins"
+                >
+                  Rp. 70,000
+                </h3>
+                <a
+                  href="allproduct.html"
+                  class="flex items-center space-x-3 bg-[#4A2311] text-white font-bold py-3 px-6 rounded-full font-inter hover:bg-[#6b341a] transition"
+                >
+                  <span>Lihat Lainnya </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -306,95 +287,108 @@
         id="card-orithin"
         class="relative w-full h-auto md:h-225 overflow-hidden my-10"
       >
-        <div
-          id="bg-orithin"
-          class="trapr absolute inset-0 w-full h-full bg-gradient-to-b to-[#D8140F] from-[#ED7B01] z-0 transition-colors duration-700"
-        ></div>
-
-        <div
-          class="card-content relative z-10 flex flex-col md:flex-row items-center justify-center pl-0 md:pl-75 space-x-0 md:space-x-10 px-10 md:px-20 py-20 md:py-50 h-full"
-        >
-          <div class="max-w-xl text-white order-2 md:order-1 mt-10 md:mt-0">
-            <h2
-              id="title-orithin"
-              class="text-4xl font-extrabold mb-6 font-inter uppercase tracking-[7px]"
-            >
-              Orithin Chocolate
-            </h2>
-            <p
-              id="desc-orithin"
-              class="font-medium font-poppins tracking-[1px] text-[18px] uppercase mt-2"
-            >
-              Dark Chocolate dengan campuran kacang mete terbaik.
-            </p>
-            <ul
-              class="list-disc list-inside font-bold font-poppins py-5 tracking-[1px]"
-            >
-              <li>Cokelat Asli Indonesia.</li>
-              <li>Rasa Manis Pas.</li>
-              <li>Cocok untuk hadiah.</li>
-            </ul>
-            <hr class="border-white/50" />
-            <div class="flex justify-between items-center p-5">
-              <h3 class="text-2xl font-semibold font-poppins">Rp. 85,000</h3>
-              <a
-                href="allproduct.html"
-                class="flex items-center space-x-3 bg-[#4A2311] text-white font-bold py-3 px-6 rounded-full font-inter hover:bg-black transition"
+        <div class="anim-wrapper">
+          <div
+            id="bg-orithin"
+            class="trapr absolute inset-0 w-full h-full bg-gradient-to-b to-[#D8140F] from-[#ED7B01] z-0 transition-colors duration-700"
+          ></div>
+          <div
+            class="card-content relative z-10 flex flex-col md:flex-row items-center justify-center pl-0 md:pl-75 space-x-0 md:space-x-10 px-10 md:px-20 py-20 md:py-50 h-full"
+          >
+            <div class="max-w-xl text-white order-2 md:order-1 mt-10 md:mt-0">
+              <h2
+                id="title-orithin"
+                class="text-4xl font-extrabold mb-6 font-inter uppercase tracking-[7px]"
               >
-                <span>Order Now</span>
-              </a>
+                Orithin Chocolate
+              </h2>
+              <p
+                id="desc-orithin"
+                class="font-medium font-poppins tracking-[1px] text-[18px] uppercase mt-2"
+              >
+                Dark Chocolate dengan campuran kacang mete terbaik.
+              </p>
+              <ul
+                class="list-disc list-inside font-bold font-poppins py-5 tracking-[1px]"
+              >
+                <li>Cokelat Asli Indonesia.</li>
+                <li>Rasa Manis Pas.</li>
+              </ul>
+              <hr class="border-white/50" />
+              <div class="flex justify-between items-center p-5">
+                <h3
+                  id="price-orithin"
+                  class="text-2xl font-semibold font-poppins"
+                >
+                  Rp. 85,000
+                </h3>
+                <a
+                  href="allproduct.html"
+                  class="flex items-center space-x-3 bg-[#4A2311] text-white font-bold py-3 px-6 rounded-full font-inter hover:bg-black transition"
+                >
+                  <span>Lihat Lainnya </span>
+                </a>
+              </div>
             </div>
+            <img
+              id="img-orithin"
+              src="content/product/Orithin_Chocolate-removebg-preview.png"
+              alt="Orithin Image"
+              class="img-shadow w-80 md:w-125 h-auto order-1 md:order-2"
+            />
           </div>
-          <img
-            id="img-orithin"
-            src="content/product/Orithin_Chocolate-removebg-preview.png"
-            alt="Orithin Product"
-            class="img-shadow w-80 md:w-125 h-auto order-1 md:order-2"
-          />
         </div>
       </div>
 
-      <div id="card-orimond" class="relative w-full overflow-hidden py-10">
-        <div
-          class="card-content flex flex-col md:flex-row items-center justify-center px-10 md:px-30 h-165 space-x-0 md:space-x-10"
-        >
-          <img
-            id="img-orimond"
-            src="content/product/Orimond_bubble_gum.png"
-            alt="Orimond Image"
-            class="img-shadow w-80 md:w-125 h-auto object-contain"
-          />
-          <div class="max-w-xl">
-            <h2
-              id="title-orimond"
-              class="text-4xl font-extrabold mb-6 font-inter uppercase tracking-[7px] text-[#2c3e50]"
-            >
-              Orimond Bubble Gum
-            </h2>
-            <p
-              id="desc-orimond"
-              class="font-medium font-poppins tracking-[1px] text-[18px] uppercase mt-2 text-gray-800"
-            >
-              Almond panggang dengan balutan rasa Bubble Gum yang unik.
-            </p>
-            <ul
-              class="list-disc list-inside font-bold font-poppins py-5 tracking-[1px] text-gray-700"
-            >
-              <li>Rasa Unik & Modern.</li>
-              <li>Almond California Premium.</li>
-              <li>Tanpa pengawet buatan.</li>
-            </ul>
-            <hr class="py-3 border-gray-400" />
-            <div class="flex justify-between items-center p-5">
-              <h3 class="text-2xl font-semibold text-black font-poppins">
-                Rp. 65,000
-              </h3>
-              <a
-                href="allproduct.html"
-                class="flex items-center space-x-3 bg-[#4A2311] text-white font-bold py-3 px-6 rounded-full font-inter hover:bg-[#6b341a] transition"
+      <div id="card-orimond" class="relative w-full overflow-hidden">
+        <div class="anim-wrapper py-10">
+          <div
+            id="bg-orimond"
+            class="trapl absolute inset-0 w-full h-full bg-gradient-to-b to-[#D8140F] from-[#ED7B01] z-0 transition-colors duration-700"
+          ></div>
+          <div
+            class="card-content relative z-10 flex flex-col md:flex-row items-center justify-center px-10 md:px-30 h-165 space-x-0 md:space-x-10"
+          >
+            <img
+              id="img-orimond"
+              src="content/product/Orimond_bubble_gum.png"
+              alt="Orimond Image"
+              class="img-shadow w-80 md:w-125 h-auto object-contain"
+            />
+            <div class="max-w-xl">
+              <h2
+                id="title-orimond"
+                class="text-4xl font-extrabold mb-6 font-inter uppercase tracking-[7px] text-[#2c3e50]"
               >
-                <span>Order Now</span>
-              </a>
+                Orimond Bubble Gum
+              </h2>
+              <p
+                id="desc-orimond"
+                class="font-medium font-poppins tracking-[1px] text-[18px] uppercase mt-2 text-gray-800"
+              >
+                Almond panggang dengan balutan rasa Bubble Gum.
+              </p>
+              <ul
+                class="list-disc list-inside font-bold font-poppins py-5 tracking-[1px] text-gray-700"
+              >
+                <li>Rasa Unik & Modern.</li>
+                <li>Almond California Premium.</li>
+              </ul>
+              <hr class="py-3 border-gray-400" />
+              <div class="flex justify-between items-center p-5">
+                <h3
+                  id="price-orimond"
+                  class="text-2xl font-semibold text-black font-poppins"
+                >
+                  Rp. 65,000
+                </h3>
+                <a
+                  href="allproduct.html"
+                  class="flex items-center space-x-3 bg-[#4A2311] text-white font-bold py-3 px-6 rounded-full font-inter hover:bg-[#6b341a] transition"
+                >
+                  <span>Lihat Lainnya </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -404,117 +398,157 @@
         id="card-rumahmente"
         class="relative w-full h-auto md:h-225 overflow-hidden my-10"
       >
-        <div
-          id="bg-rumahmente"
-          class="trapr-bfull absolute inset-0 w-full h-full bg-[#BBDB53] z-0 transition-colors duration-700"
-        ></div>
+        <div class="anim-wrapper">
+          <div
+            id="bg-rumahmente"
+            class="trapr absolute inset-0 w-full h-full bg-[#BBDB53] z-0 transition-colors duration-700"
+          ></div>
 
-        <div
-          class="card-content relative z-10 flex flex-col md:flex-row items-center justify-center pl-0 md:pl-75 space-x-0 md:space-x-10 px-10 md:px-20 py-20 md:py-50 h-full"
-        >
-          <div class="max-w-xl text-white order-2 md:order-1 mt-10 md:mt-0">
-            <h2
-              id="title-rumahmente"
-              class="text-4xl font-extrabold mb-6 font-inter uppercase tracking-[7px] text-[#2d4600]"
-            >
-              Pumpkin Seed
-            </h2>
-            <p
-              id="desc-rumahmente"
-              class="font-medium font-poppins tracking-[1px] text-[18px] uppercase mt-2 text-[#2d4600]"
-            >
-              Biji labu panggang alami kaya nutrisi dan serat.
-            </p>
-            <ul
-              class="list-disc list-inside font-bold font-poppins py-5 tracking-[1px] text-[#2d4600]"
-            >
-              <li>Sumber Protein Nabati.</li>
-              <li>Cocok untuk diet.</li>
-              <li>Rasa Gurih Alami.</li>
-            </ul>
-            <hr class="border-[#2d4600]" />
-            <div class="flex justify-between items-center p-5">
-              <h3 class="text-2xl font-semibold font-poppins text-[#2d4600]">
-                Rp. 50,000
-              </h3>
-              <a
-                href="allproduct.html"
-                class="flex items-center space-x-3 bg-[#4A2311] text-white font-bold py-3 px-6 rounded-full font-inter hover:bg-black transition"
+          <div
+            class="card-content relative z-10 flex flex-col md:flex-row items-center justify-center pl-0 md:pl-75 space-x-0 md:space-x-10 px-10 md:px-20 py-20 md:py-50 h-full"
+          >
+            <div class="max-w-xl text-white order-2 md:order-1 mt-10 md:mt-0">
+              <h2
+                id="title-rumahmente"
+                class="text-4xl font-extrabold mb-6 font-inter uppercase tracking-[7px] text-[#2d4600]"
               >
-                <span>Order Now</span>
-              </a>
+                Pumpkin Seed
+              </h2>
+              <p
+                id="desc-rumahmente"
+                class="font-medium font-poppins tracking-[1px] text-[18px] uppercase mt-2 text-[#2d4600]"
+              >
+                Biji labu panggang alami kaya nutrisi.
+              </p>
+              <ul
+                class="list-disc list-inside font-bold font-poppins py-5 tracking-[1px] text-[#2d4600]"
+              >
+                <li>Sumber Protein Nabati.</li>
+                <li>Cocok untuk diet.</li>
+              </ul>
+              <hr class="border-[#2d4600]" />
+              <div class="flex justify-between items-center p-5">
+                <h3
+                  id="price-rumahmente"
+                  class="text-2xl font-semibold font-poppins text-[#2d4600]"
+                >
+                  Rp. 50,000
+                </h3>
+                <a
+                  href="allproduct.html"
+                  class="flex items-center space-x-3 bg-[#4A2311] text-white font-bold py-3 px-6 rounded-full font-inter hover:bg-black transition"
+                >
+                  <span>Lihat Lainnya </span>
+                </a>
+              </div>
             </div>
+            <img
+              id="img-rumahmente"
+              src="content/product/RumahMente_Pumpkin_seed.png"
+              alt="Rumah Mente Image"
+              class="img-shadow w-80 md:w-125 h-auto drop-shadow-lg order-1 md:order-2"
+            />
           </div>
-          <img
-            id="img-rumahmente"
-            src="content/product/RumahMente_Pumpkin_seed.png"
-            alt="Rumah Mente Image"
-            class="img-shadow w-80 md:w-125 h-auto drop-shadow-lg order-1 md:order-2"
-          />
         </div>
       </div>
     </div>
+
     <img
-      src="/content/sret/sret-pink.png"
+      src="content/sret/sret-pink.png"
       alt="sret-foot"
       class="w-full -bottom-1 relative"
     />
+    <footer>
+      <div class="w-full p-10 bg-[#FA7369] text-white">
+        <img src="content/logo.png" alt="Orinuts Logo" class="w-32 mb-6" />
 
-    <footer class="mt-auto relative z-50">
-      <div id="footer-bg" class="w-full pt-10 px-20 bg-[#FA7369] text-white">
-        <img src="/content/logo.png" alt="Orinuts Logo" class="w-32 mb-6" />
-        <div
-          class="flex flex-col md:flex-row justify-between items-start pt-6 text-sm gap-8 md:gap-0"
-        >
-          <div class="w-full md:w-1/4 text-white">
-            <p>The No.1 Healthy Snack in Indonesia.</p>
-          </div>
-          <div class="w-full md:w-3/4 text-white flex gap-10">
-            <div>
-              <h2 class="font-bold uppercase">Main Office</h2>
-              <p>Surabaya, Indonesia</p>
+        <div class="flex justify-between items-start pt-6 text-sm">
+          <div class="w-full md:w-1/4 pr-8 text-white">
+            <p class="leading-relaxed">
+              the No.1 Healthy Snack in Indonesia. We provide <br />
+              premium quality roasted nut snacks, crafted <br />
+              without salt, sugar, preservatives, or MSG — <br />
+              delivering a pure and healthy taste in every bite.
+            </p>
+
+            <div class="flex space-x-3 pt-5">
+              <a
+                href="https://www.instagram.com/orinuts.official?igsh=em1tazcxOWFqNGpm"
+                ><img
+                  src="content/icon/instagram.svg"
+                  alt="Instagram"
+                  class="w-7 h-7 rounded-full border border-gray-100 p-1 brightness-100 bg-white"
+              /></a>
+              <a href="https://wa.me/62816521369"
+                ><img
+                  src="content/icon/whatsapp.png"
+                  alt="WhatsApp"
+                  class="w-7 h-7 rounded-full border border-gray-100 p-1 brightness-100 bg-white"
+              /></a>
+              <a href="https://www.facebook.com/share/16N9e3564B/"
+                ><img
+                  src="content/icon/facebook.svg"
+                  alt="Facebook"
+                  class="w-7 h-7 rounded-full border border-gray-100 p-1 brightness-100 bg-white"
+              /></a>
+              <a href="mailto:orinuts.official@gmail.com "
+                ><img
+                  src="content/icon/mail.svg"
+                  alt="Email"
+                  class="w-7 h-7 rounded-full border border-gray-100 p-1 brightness-100 bg-white"
+              /></a>
             </div>
-            <div>
-              <h2 class="font-bold uppercase">Menu</h2>
-              <a href="#">Home</a>
+          </div>
+
+          <div class="flex justify-between w-full md:w-3/4">
+            <div class="w-1/3 text-white">
+              <h2 class="font-bold text-lg pb-4 uppercase">main office</h2>
+              <p class="leading-relaxed">
+                Bavarian Village A 7,<br />
+                Darmo Permai Baru III,<br />
+                Surabaya, Indonesia 60188
+              </p>
+            </div>
+
+            <div class="w-1/3 text-white">
+              <h2 class="font-bold text-lg pb-4 uppercase">main menu</h2>
+              <a href="index.php" class="block leading-loose hover:underline"
+                >HOME</a
+              >
+              <a href="about.php" class="block leading-loose hover:underline"
+                >ABOUT US</a
+              >
+              <a href="product.php" class="block leading-loose hover:underline"
+                >PRODUCT</a
+              >
+              <a href="contact.php" class="block leading-loose hover:underline"
+                >CONTACT</a
+              >
+            </div>
+
+            <div class="w-1/3 text-white">
+              <h2 class="font-bold text-lg pb-4 uppercase">
+                Official Online Store
+              </h2>
+              <p class="leading-loose">
+                Official Shopee <br />
+                Official Tokopedia <br />
+                <br />
+                +62 816-521-369
+              </p>
             </div>
           </div>
         </div>
+
         <hr class="mt-12 mb-4 border-white" />
-        <p class="text-center md:text-left text-sm text-white mt-2 pb-5">
-          Orinuts © 2025 All Rights Reserved.
+
+        <p class="text-sm text-white mt-2">
+          Orinuts © 2025 All Rights Reserved. | Privacy Policy Term of Service
         </p>
       </div>
     </footer>
 
     <script>
-      // Navbar & Mobile Menu Script
-      const navbar = document.getElementById("navbar");
-      window.addEventListener("scroll", () => {
-        if (window.scrollY > 50) navbar.classList.add("shadow-lg");
-        else navbar.classList.remove("shadow-lg");
-      });
-
-      const hamburgerButton = document.getElementById("hamburger-button");
-      const mobileMenu = document.getElementById("mobile-menu");
-      const closeMenuButton = document.getElementById("close-menu");
-
-      function openMenu() {
-        mobileMenu.classList.remove("translate-x-full");
-      }
-      function closeMenu() {
-        mobileMenu.classList.add("translate-x-full");
-      }
-      hamburgerButton.addEventListener("click", openMenu);
-      closeMenuButton.addEventListener("click", closeMenu);
-
-      // ============================================
-      //  SISTEM ANIMASI CARD & DATA PRODUK
-      // ============================================
-
-      // 1. Data Produk (Database Mini)
-      // Kita siapkan beberapa varian untuk setiap kategori agar terlihat "Baru" saat masuk kembali.
-
       const productsData = {
         orinuts: [
           {
@@ -522,58 +556,46 @@
             img: "content/product/Orinuts_Roasted_Cashew_Original_200g-removebg-preview.png",
             desc: "Kacang mete original panggang sempurna.",
             price: "Rp. 75,000",
+            bg: "bg-gradient-to-b to-[#D8140F] from-[#ED7B01]",
           },
           {
             title: "Salted Cashew",
             img: "content/product/Orinuts_4_Mighty_Nuts_200g-removebg-preview.png",
             desc: "Kacang mete dengan taburan garam laut himalaya.",
             price: "Rp. 78,000",
-          }, // Ganti gambar jika ada
-          {
-            title: "Honey Cashew",
-            img: "content/product/Orinuts_Roasted_Cashew_Original_200g-removebg-preview.png",
-            desc: "Sensasi manis madu membalut kacang mete.",
-            price: "Rp. 80,000",
+            bg: "bg-gradient-to-b to-[#2980B9] from-[#6DD5FA]",
           },
         ],
         orithin: [
           {
-            title: "Orithin Dark Choco",
+            title: "Dark Chocolate",
             img: "content/product/Orithin_Chocolate-removebg-preview.png",
             desc: "Dark Chocolate premium 70%.",
+            price: "Rp. 85,000",
             bg: "bg-gradient-to-b to-[#D8140F] from-[#ED7B01]",
           },
           {
-            title: "Orithin Milk Choco",
+            title: "Matcha Choco",
             img: "content/product/Orithin_Chocolate-removebg-preview.png",
-            desc: "Cokelat susu lembut yang lumer di mulut.",
-            bg: "bg-gradient-to-b to-[#8E44AD] from-[#C39BD3]",
-          }, // Warna Ungu
-          {
-            title: "Orithin Matcha",
-            img: "content/product/Orithin_Chocolate-removebg-preview.png",
-            desc: "Paduan cokelat putih dan teh hijau jepang.",
-            bg: "bg-gradient-to-b to-[#1E8449] from-[#58D68D]",
-          }, // Warna Hijau
+            desc: "Cokelat putih dengan teh hijau jepang.",
+            price: "Rp. 90,000",
+            bg: "bg-gradient-to-b to-[#117A65] from-[#58D68D]",
+          },
         ],
         orimond: [
           {
-            title: "Orimond Bubble Gum",
+            title: "Bubble Gum",
             img: "content/product/Orimond_bubble_gum.png",
             desc: "Rasa unik permen karet yang nostalgia.",
             price: "Rp. 65,000",
+            bg: "bg-gradient-to-b to-[#D8140F] from-[#ED7B01]",
           },
           {
-            title: "Orimond Seaweed",
+            title: "Seaweed",
             img: "content/product/Orimond_seaweed.png",
             desc: "Gurihnya rumput laut asli korea.",
             price: "Rp. 68,000",
-          },
-          {
-            title: "Orimond Honey Butter",
-            img: "content/product/Orimond_Honey_Butter_Almond_75g-removebg-preview.png",
-            desc: "Manis mentega dan madu yang pas.",
-            price: "Rp. 70,000",
+            bg: "bg-gradient-to-b to-[#154360] from-[#2980B9]",
           },
         ],
         rumahmente: [
@@ -581,105 +603,110 @@
             title: "Pumpkin Seed",
             img: "content/product/RumahMente_Pumpkin_seed.png",
             desc: "Biji labu pilihan kaya magnesium.",
+            price: "Rp. 50,000",
             bg: "bg-[#BBDB53]",
           },
           {
             title: "Sunflower Seed",
             img: "content/product/RumahMente_Pumpkin_seed.png",
             desc: "Kuaci kupas siap makan, anti ribet.",
-            bg: "bg-[#F7DC6F]",
-          }, // Kuning
-          {
-            title: "Chia Seed",
-            img: "content/product/RumahMente_Pumpkin_seed.png",
-            desc: "Superfood untuk tambahan nutrisi harianmu.",
-            bg: "bg-[#85929E]",
-          }, // Abu
+            price: "Rp. 45,000",
+            bg: "bg-[#F4D03F]",
+          },
         ],
       };
 
-      // State index untuk melacak produk mana yang sedang tampil
       let indexState = { orinuts: 0, orithin: 0, orimond: 0, rumahmente: 0 };
 
-      // Fungsi Utama Animasi
-      function animateProduct(idCategory, direction, intervalTime) {
-        const container = document.getElementById(`card-${idCategory}`);
-        const content = container.querySelector(".card-content");
+      // ============================================
+      //  LOGIKA ANIMASI
+      // ============================================
 
-        // Elemen yang akan diupdate
+      function animateCard(idCategory, direction, intervalSeconds) {
+        const container = document.getElementById(`card-${idCategory}`);
+
+        // UPDATE: Pilih .anim-wrapper (bukan .card-content saja)
+        const wrapper = container.querySelector(".anim-wrapper");
+
+        // Elemen DOM untuk diupdate
         const imgEl = document.getElementById(`img-${idCategory}`);
         const titleEl = document.getElementById(`title-${idCategory}`);
         const descEl = document.getElementById(`desc-${idCategory}`);
-        const bgEl = document.getElementById(`bg-${idCategory}`); // Optional untuk card yang punya bg
+        const priceEl = document.getElementById(`price-${idCategory}`);
+        const bgEl = document.getElementById(`bg-${idCategory}`);
 
         setInterval(() => {
-          // 1. ANIMASI KELUAR
+          // STEP 1: ANIMASI KELUAR (EXIT)
           if (direction === "left") {
-            content.classList.add("slide-out-left");
+            wrapper.classList.add("exit-to-left");
           } else {
-            content.classList.add("slide-out-right");
+            wrapper.classList.add("exit-to-right");
           }
 
-          // 2. TUNGGU ANIMASI SELESAI, LALU GANTI DATA (0.8 detik sesuai CSS transition)
+          // Tunggu animasi selesai
           setTimeout(() => {
-            // Update Index Data (Looping)
+            // STEP 2: SWAP DATA
             indexState[idCategory] =
               (indexState[idCategory] + 1) % productsData[idCategory].length;
             const newData = productsData[idCategory][indexState[idCategory]];
 
-            // Swap Data DOM
-            titleEl.innerText = newData.title;
-            descEl.innerText = newData.desc;
-            imgEl.src = newData.img; // Pastikan path gambar benar
+            if (titleEl) titleEl.innerText = newData.title;
+            if (descEl) descEl.innerText = newData.desc;
+            if (priceEl) priceEl.innerText = newData.price;
+            if (imgEl) imgEl.src = newData.img;
 
-            // Khusus update background color jika ada (Orithin & Rumah Mente)
+            // Ganti Background Color
             if (bgEl && newData.bg) {
-              bgEl.className = `trapr absolute inset-0 w-full h-full z-0 transition-colors duration-700 ${newData.bg}`;
+              const baseClasses = bgEl.className
+                .split(" ")
+                .slice(0, 6)
+                .join(" ");
+              bgEl.className = `${baseClasses} ${newData.bg} transition-colors duration-700`;
             }
 
-            // Reset posisi ke sisi berlawanan agar terlihat masuk baru
-            // Hapus class keluar, tambah class "persiapan masuk"
-            content.classList.remove("slide-out-left", "slide-out-right");
-
-            // Kita harus mematikan transisi sebentar agar perpindahan posisi tidak terlihat
-            content.style.transition = "none";
+            // STEP 3: TELEPORT KE SISI SEBERANG (MATIKAN TRANSISI)
+            wrapper.style.transition = "none";
+            wrapper.classList.remove("exit-to-left", "exit-to-right");
 
             if (direction === "left") {
-              // Jika keluar kiri, masuk dari kanan (seperti carousel) ATAU masuk dari kiri lagi?
-              // Request user: "masuk kembali". Biasanya carousel masuk dari sisi lawan.
-              // Namun karena user bilang "masuk keluar arah kiri", saya asumsikan masuk dari kiri lagi (bounce) atau swipe lewat.
-              // Mari kita buat swipe lewat (masuk dari kanan) agar natural.
-              // TAPI user spesifik: "masuk keluar arah kiri". Oke, kita buat dia muncul dari kiri juga (fade in from left).
-              content.classList.add("slide-out-left"); // Tetap di kiri
+              wrapper.classList.add("enter-from-right");
             } else {
-              content.classList.add("slide-out-right"); // Tetap di kanan
+              wrapper.classList.add("enter-from-left");
             }
 
             // Force Reflow
-            void content.offsetWidth;
+            void wrapper.offsetWidth;
 
-            // 3. ANIMASI MASUK (Kembali ke posisi 0)
-            content.style.transition =
-              "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease";
-            content.classList.remove("slide-out-left", "slide-out-right");
-          }, 800); // Waktu tunggu sama dengan durasi transition CSS
-        }, intervalTime * 1000); // Konversi detik ke milidetik
+            // STEP 4: ANIMASI MASUK (ENTER)
+            wrapper.style.transition =
+              "transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease";
+            wrapper.classList.remove("enter-from-right", "enter-from-left");
+          }, 1000);
+        }, intervalSeconds * 1000);
       }
 
-      // Jalankan Animasi sesuai request waktu user
       document.addEventListener("DOMContentLoaded", () => {
-        // Orinuts: Kiri, 3 Detik
-        animateProduct("orinuts", "left", 7);
-
-        // Orithin: Kanan, 4 Detik
-        animateProduct("orithin", "right", 13);
-
-        // Orimond: Kiri, 5 Detik (Biar variasi)
-        animateProduct("orimond", "left", 18);
-
-        // Rumah Mente: Kanan, 6 Detik
-        animateProduct("rumahmente", "right", 23);
+        animateCard("orinuts", "left", 5);
+        animateCard("orithin", "right", 7);
+        animateCard("orimond", "left", 6);
+        animateCard("rumahmente", "right", 8);
       });
+
+      // Navbar Logic
+      const navbar = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) navbar.classList.add("shadow-lg");
+        else navbar.classList.remove("shadow-lg");
+      });
+      const hamburgerButton = document.getElementById("hamburger-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const closeMenuButton = document.getElementById("close-menu");
+      hamburgerButton.addEventListener("click", () =>
+        mobileMenu.classList.remove("translate-x-full")
+      );
+      closeMenuButton.addEventListener("click", () =>
+        mobileMenu.classList.add("translate-x-full")
+      );
     </script>
   </body>
 </html>
