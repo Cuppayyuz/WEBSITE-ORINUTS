@@ -49,9 +49,9 @@
       }
 
       /* =================================
-        CSS BARU UNTUK ANIMASI
-        =================================
-      */
+        CSS BARU UNTUK ANIMASI
+        =================================
+      */
 
       /* Transisi untuk teks (fade & scale) */
       #hero-title,
@@ -106,9 +106,27 @@
       }
 
       /* =================================
-        ANIMASI KACANG (KEMBALI SEPERTI SEMULA)
-        =================================
-      */
+         STYLE UNTUK TOMBOL AKTIF (BARU)
+         =================================
+      */
+      .product-thumbnail {
+        transition: transform 0.3s ease, filter 0.3s ease;
+        border-radius: 16px; /* Sudut melengkung default */
+        padding: 4px; /* Membuat gambar bulat jika belum */
+      }
+
+      /* Class ini akan ditambahkan lewat JS saat tombol aktif */
+      .active-thumb img {
+        transform: scale(1.2); /* Memperbesar sedikit */
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); /* Glow putih */
+        border: 3px solid white; /* Garis tepi putih */
+        border-radius: 24px;
+      }
+
+      /* =================================
+        ANIMASI KACANG
+        =================================
+      */
       @keyframes float-normal {
         0%,
         100% {
@@ -241,14 +259,14 @@
 
       <div
         id="mobile-menu"
-        class="lg:hidden fixed top-0 right-0 h-full w-3/4 max-w-sm bg-green-500 transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto"
+        class="lg:hidden fixed top-0 right-0 h-full w-3/4 max-w-sm bg-white  transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto"
       >
         <div class="p-8">
           <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-bold text-white">Menu</h2>
+            <h2 class="text-2xl font-bold text-black">Menu</h2>
             <button
               id="close-menu"
-              class="text-white hover:text-gray-300 text-3xl"
+              class="text-black hover:text-gray-900 text-3xl"
             >
               ✕
             </button>
@@ -256,22 +274,22 @@
 
           <a
             href="index.html"
-            class="block py-3 text-white font-semibold hover:text-green-800 border-b border-white/30"
+            class="block py-3 text-black font-semibold hover:text-gray-900 border-b border-white/30"
             >HOME</a
           >
           <a
-            href="#"
-            class="block py-3 text-white font-semibold hover:text-green-800 border-b border-white/30"
+            href="about.html"
+            class="block py-3 text-black font-semibold hover:text-gray-900 border-b border-white/30"
             >ABOUT US</a
           >
           <a
-            href="p_orinuts.html"
-            class="block py-3 text-white font-semibold hover:text-green-800 border-b border-white/30"
+            href="product.html"
+            class="block py-3 text-black font-semibold hover:text-gray-900 border-b border-white/30"
             >PRODUCT</a
           >
           <a
-            href="#"
-            class="block py-3 text-white font-semibold hover:text-green-800"
+            href="contact.html"
+            class="block py-3 text-black font-semibold hover:text-gray-900 border-b border-white/30"
             >CONTACT</a
           >
         </div>
@@ -344,7 +362,10 @@
             <div
               class="flex justify-center lg:justify-start items-center space-x-7 mt-12"
             >
-              <button id="btn-hijau" class="cursor-pointer">
+              <button
+                id="btn-hijau"
+                class="cursor-pointer relative z-50 active-thumb"
+              >
                 <img
                   id="thumb-hijau"
                   src="content/product/Orinuts_Anti_Oxidant_Mix_200gr-removebg-preview.png"
@@ -352,7 +373,7 @@
                   class="w-16 lg:w-20 h-auto product-thumbnail"
                 />
               </button>
-              <button id="btn-almond" class="cursor-pointer">
+              <button id="btn-almond" class="cursor-pointer relative z-50">
                 <img
                   id="thumb-almond"
                   src="content/product/Orinuts_Roasted_Almond_Original_200g-removebg-preview.png"
@@ -360,7 +381,7 @@
                   class="w-16 lg:w-20 h-auto product-thumbnail"
                 />
               </button>
-              <button id="btn-cashew" class="cursor-pointer">
+              <button id="btn-cashew" class="cursor-pointer relative z-50">
                 <img
                   id="thumb-cashew"
                   src="content/product/Orinuts_Roasted_Cashew_Original_200g-removebg-preview.png"
@@ -391,37 +412,55 @@
               id="nut-1"
               src="content/kacang/almond1-removebg-preview.png"
               alt="almond"
-              class="floating-nut absolute w-16 md:w-20 lg:w-34 z-10 -top-2 left-3 sm:-top-4 sm:left-5 lg:left-32 rotate-38"
+              class="floating-nut absolute rotate-38 z-10 
+              w-16 top-13 left-6
+              md:top-3 md:left-8 md:w-20 
+              lg:left-34 lg:w-34 lg:-top-7 "
             />
             <img
               id="nut-2"
               src="content/kacang/kismis.png"
               alt="cashew"
-              class="floating-nut-2 absolute w-10 md:w-12 lg:w-18 z-20 bottom-15 -left-50 sm:bottom-12 sm:left-10 lg:-bottom-3 lg:left-45 rotate-35"
+              class="floating-nut-2 absolute  rotate-35 z-20
+              bottom-15 left-12 w-8
+              md:bottom-5 md:left-14 md:w-11
+              lg:w-18 lg:left-45 lg:-bottom-3"
             />
             <img
               id="nut-3"
               src="content/kacang/biji_labu.png"
               alt="pistachio"
-              class="floating-nut-3 absolute w-10 md:w-12 lg:w-16 z-5 -top-10 -right-4 sm:-top-1 sm:-right-4 lg:right-30"
+              class="floating-nut-3 absolute z-5 
+              w-9 top-15 right-5 
+              md:top-5 md:right-7 md:w-11
+              lg:right-30 lg:w-16 lg:-top-5" 
             />
             <img
               id="nut-4"
               src="content/kacang/almond1-removebg-preview.png"
               alt="walnut"
-              class="floating-nut-4 absolute w-16 md:w-20 lg:w-30 z-20 bottom-12 right-0 lg:-bottom-5 lg:right-24 rotate-38"
+              class="floating-nut-4 absolute rotate-38 z-20
+               w-16  bottom-15 right-5 
+               md:w-20 md:bottom-5 md:right-7 
+              lg:right-24 lg:-bottom-5 lg:w-30"
             />
             <img
               id="nut-5"
               src="content/kacang/kuaci.png"
               alt="pecan"
-              class="floating-nut-5 absolute w-12 md:w-16 lg:w-30 z-5 top-40 -left-2 sm:left-0 lg:left-20"
+              class="floating-nut-5 absolute z-5
+              w-15 top-35 left-1
+               md:left-3 md:w-17 md:top-32
+               lg:left-20 lg:w-30 "
             />
             <img
               id="nut-6"
               src="content/kacang/mente.png"
               alt="mente"
-              class="floating-nut-6 absolute w-16 md:w-20 lg:w-40 z-5 bottom-0 right-8 sm:right-10 lg:bottom-30 lg:right-20 -rotate-45"
+              class="floating-nut-6 absolute -rotate-45  z-5 
+               w-26  bottom-30 -right-6
+               md:-right-4 md:w-30 md:bottom-25
+               lg:bottom-30 lg:right-20 lg:w-40 "
             />
           </div>
         </div>
@@ -816,31 +855,30 @@
           footerColor: "bg-[#aaf334]",
           headingColor: "text-[#38761d]",
           blurColor: "bg-[#72C84A]",
-          // KEMBALI: 'nuts' hanya berisi daftar gambar
           nuts: [
             {
               src: "content/kacang/almond1-removebg-preview.png",
-              cls: "floating-nut absolute w-16 md:w-20 lg:w-34 z-10 -top-2 left-3 sm:-top-4 sm:left-5 lg:left-32 rotate-38",
+              cls: "floating-nut absolute w-16 top-13 left-6 md:top-3 md:left-8 md:w-20 lg:left-34 lg:w-34 lg:-top-7 z-10  rotate-38",
             },
             {
               src: "content/kacang/kismis.png",
-              cls: "floating-nut-2 absolute w-10 md:w-12 lg:w-18 z-20 bottom-15 -left-50 sm:bottom-12 sm:left-10 lg:-bottom-3 lg:left-45 rotate-35",
+              cls: "floating-nut-2 absolute bottom-15 left-12 w-8 md:bottom-5 md:left-14 md:w-11 lg:w-18 lg:left-45 lg:-bottom-3 z-20 rotate-35",
             },
             {
               src: "content/kacang/biji_labu.png",
-              cls: "floating-nut-3 absolute w-10 md:w-12 lg:w-16 z-5 -top-10 -right-4 sm:-top-1 sm:-right-4 lg:right-30",
+              cls: "floating-nut-3 absolute w-9 top-15 right-5 md:top-5 md:right-7 md:w-11 lg:right-30 lg:w-16 lg:-top-5 z-5",
             },
             {
               src: "content/kacang/almond1-removebg-preview.png",
-              cls: "floating-nut-4 absolute w-16 md:w-20 lg:w-30 z-20 bottom-12 right-0 lg:-bottom-5 lg:right-24 rotate-38",
+              cls: "floating-nut-4 absolute w-16  bottom-15 right-5 md:w-20 md:bottom-5 md:right-7 lg:right-24 lg:-bottom-5 lg:w-30 z-20  rotate-38",
             },
             {
               src: "content/kacang/kuaci.png",
-              cls: "floating-nut-5 absolute w-12 md:w-16 lg:w-30 z-5 top-40 -left-2 sm:left-0 lg:left-20",
+              cls: "floating-nut-5 absolute w-15 top-35 left-1 md:left-3 md:w-17 md:top-32 lg:left-20 lg:w-30 z-5 ",
             },
             {
               src: "content/kacang/mente.png",
-              cls: "floating-nut-6 absolute w-16 md:w-20 lg:w-40 z-5 bottom-0 right-8 sm:right-10 lg:bottom-30 lg:right-20 -rotate-45",
+              cls: "floating-nut-6 absolute  w-26  bottom-30 -right-6 md:-right-4 md:w-30 md:bottom-25 lg:bottom-30 lg:right-20 lg:w-40 z-5 -rotate-45",
             },
           ],
         },
@@ -860,27 +898,27 @@
           nuts: [
             {
               src: "content/kacang/almond1-removebg-preview.png",
-              cls: "floating-nut absolute w-16 md:w-20 lg:w-34 z-10 -top-2 left-3 sm:-top-4 sm:left-5 lg:left-32 rotate-38",
+              cls: "floating-nut absolute w-17 top-13 left-6 md:top-3 md:left-8 md:w-20  lg:left-34 lg:w-34 lg:-top-7 z-10  rotate-38",
             },
             {
               src: "content/kacang/almond1-removebg-preview.png",
-              cls: "floating-nut absolute w-10 md:w-12 lg:w-24 z-20 bottom-15 -left-50 sm:bottom-12 sm:left-10 lg:-bottom-3 lg:left-45 rotate-35",
+              cls: "floating-nut-2 absolute bottom-15 left-12 w-12 md:bottom-5 md:left-14 md:w-15 lg:w-24 lg:left-45 lg:-bottom-3 z-20 -rotate-30",
             },
             {
               src: "content/kacang/almond1-removebg-preview.png",
-              cls: "floating-nut-3 absolute w-10 md:w-12 lg:w-24 z-5 -top-10 -right-4 sm:-top-1 sm:-right-4 lg:right-30",
+              cls: "floating-nut-3 absolute w-12 top-17 right-7 md:top-6 md:right-7 md:w-15 lg:right-30 lg:w-24 lg:-top-5 z-5",
             },
             {
               src: "content/kacang/almond1-removebg-preview.png",
-              cls: "floating-nut-4 absolute w-16 md:w-20 lg:w-30 z-20 bottom-12 right-0 lg:-bottom-5 lg:right-24 rotate-38",
+              cls: "floating-nut-4 absolute w-17  bottom-15 right-7 md:w-20 md:bottom-5 md:right-7 lg:right-30 lg:-bottom-5 lg:w-30 z-20  rotate-38",
             },
             {
               src: "content/kacang/almond1-removebg-preview.png",
-              cls: "floating-nut-5 absolute w-12 md:w-16 lg:w-30 z-5 top-40 -left-2 sm:left-0 lg:left-20",
+              cls: "floating-nut-5 absolute w-14 top-35 left-1 md:left-3 md:w-17 md:top-32 lg:left-20 lg:w-30 z-5 ",
             },
             {
               src: "content/kacang/almond1-removebg-preview.png",
-              cls: "floating-nut-6 absolute w-16 md:w-20 lg:w-40 z-5 bottom-0 right-8 sm:right-10 lg:bottom-30 lg:right-20 -rotate-45",
+              cls: "floating-nut-6 absolute w-13  bottom-35 right-2 md:-right-2 md:w-20 md:bottom-32 lg:bottom-30 lg:right-20 lg:w-40 z-5  -rotate-45",
             },
           ],
         },
@@ -900,27 +938,27 @@
           nuts: [
             {
               src: "content/kacang/mente.png",
-              cls: "floating-nut absolute w-16 md:w-20 lg:w-60 z-10 -top-2 left-3 lg:-top-12 sm:left-5 lg:left-18 rotate-30",
+              cls: "floating-nut absolute w-30 top-10 -left-3 md:-top-6 md:-left-4 md:w-40 lg:left-18 lg:w-60 lg:-top-12 z-10  rotate-30",
             },
             {
               src: "content/kacang/mente.png",
-              cls: "floating-nut absolute w-10 md:w-12 lg:w-46 z-20 bottom-15 -left-50  sm:left-10 lg:-bottom-4 lg:left-30 rotate-180",
+              cls: "floating-nut-2 absolute bottom-13 left-3 w-22 md:bottom-5 md:left-8 md:w-26 lg:w-46 lg:left-30 lg:-bottom-4 z-20  rotate-180",
             },
             {
               src: "content/kacang/mente.png",
-              cls: "floating-nut-3 absolute w-10 md:w-12 lg:w-48 z-5 -top-1 -right-4 lg:-top-10 sm:-right-4 lg:right-24",
+              cls: "floating-nut-3 absolute w-22 top-13 right-3 md:top-3 md:right-5 md:w-26 lg:right-24 lg:w-48 lg:-top-10 z-5",
             },
             {
               src: "content/kacang/mente.png",
-              cls: "floating-nut-4 absolute w-16 md:w-20 lg:w-38 z-20 bottom-12 right-0 lg:-bottom-5 lg:right-24 rotate-38",
+              cls: "floating-nut-4 absolute w-30  bottom-7 right-2 md:w-38 md:-bottom-5 md:right-1 lg:right-24 lg:-bottom-5 lg:w-38 z-20  rotate-38",
             },
             {
               src: "content/kacang/mente.png",
-              cls: "floating-nut-5 absolute w-12 md:w-16 lg:w-38 z-5 top-40 -left-2 sm:left-0 lg:left-20 ",
+              cls: "floating-nut-5 absolute w-22 top-35 -left-4 md:-left-3 md:w-28 md:top-34 lg:left-20 lg:w-38 z-5 ",
             },
             {
               src: "content/kacang/mente.png",
-              cls: "floating-nut-6 absolute w-16 md:w-20 lg:w-46   z-5 bottom-0 right-8 sm:right-10 lg:bottom-30 lg:right-20 -rotate-45",
+              cls: "floating-nut-6 absolute  w-20  bottom-35 -right-2 md:-right-4 md:w-30 md:bottom-25 lg:bottom-30 lg:right-20 lg:w-46 z-5  -rotate-45",
             },
           ],
         },
@@ -947,15 +985,45 @@
         document.getElementById("nut-6"),
       ];
 
-      // KEMBALI: 'animatedElements' berisi teks dan gambar utama
       const animatedElements = [heroTitle, heroDesc, mainImage];
 
-      // 3. Tombol Pemicu
+      // 3. Tombol Pemicu & Logika Pilihan
       const btnHijau = document.getElementById("btn-hijau");
       const btnAlmond = document.getElementById("btn-almond");
       const btnCashew = document.getElementById("btn-cashew");
 
+      // Mapping tombol supaya mudah diakses
+      const buttons = {
+        hijau: btnHijau,
+        almond: btnAlmond,
+        cashew: btnCashew,
+      };
+
+      // Daftar urutan produk untuk auto-rotate
+      const productKeys = ["hijau", "almond", "cashew"];
+      let currentIndex = 0;
+      let autoRotateInterval; // Variabel untuk menyimpan timer
       let isAnimating = false;
+
+      // Fungsi memulai auto-rotation
+      function startAutoRotation() {
+        // Hapus interval lama jika ada, untuk menghindari dobel timer
+        if (autoRotateInterval) clearInterval(autoRotateInterval);
+
+        // Set interval baru: 10 detik (10000ms)
+        autoRotateInterval = setInterval(() => {
+          // Pindah ke index berikutnya. Gunakan modulo (%) agar berputar (0->1->2->0)
+          currentIndex = (currentIndex + 1) % productKeys.length;
+          const nextKey = productKeys[currentIndex];
+          updateProduct(nextKey);
+        }, 10000);
+      }
+
+      // Fungsi mereset timer (dipanggil saat user klik manual)
+      function resetAutoRotation() {
+        clearInterval(autoRotateInterval); // Stop timer yang sedang berjalan
+        startAutoRotation(); // Mulai timer baru dari 0 lagi
+      }
 
       // 4. Fungsi Utama untuk Update Tampilan
       function updateProduct(productId) {
@@ -968,37 +1036,38 @@
           return;
         }
 
+        // --- UPDATE TOMBOL (VISUAL SELECT) ---
+        // 1. Hapus class 'active-thumb' dari semua tombol
+        Object.values(buttons).forEach((btn) =>
+          btn.classList.remove("active-thumb")
+        );
+        // 2. Tambahkan class 'active-thumb' ke tombol yang dipilih
+        if (buttons[productId]) {
+          buttons[productId].classList.add("active-thumb");
+        }
+        // 3. Sinkronisasi currentIndex agar rotasi otomatis lanjut dari posisi ini
+        currentIndex = productKeys.indexOf(productId);
+
         // --- Fase 1: Fade Out ---
         animatedElements.forEach((el) => el.classList.add("is-changing"));
-        nuts.forEach((el) => el.classList.add("is-changing")); // Kacang fade out
+        nuts.forEach((el) => el.classList.add("is-changing"));
         waveImage.classList.add("is-changing");
         waveImageFooter.classList.add("is-changing");
 
         // --- Fase 2: Ganti Konten ---
         setTimeout(() => {
-          // Ganti teks dan gambar utama
           heroTitle.innerHTML = data.title;
           heroDesc.innerHTML = data.description;
           mainImage.src = data.mainImage;
           waveImage.src = data.waveImage;
           waveImageFooter.src = data.waveImage;
 
-          // KEMBALI: Logika 'nuts' hanya mengganti 'src'
           nuts.forEach((nut, index) => {
-            // Cek apakah data untuk index ini ada (untuk menghindari error)
             if (data.nuts[index]) {
               nut.src = data.nuts[index].src;
-              nut.className = data.nuts[index].cls; // INI YANG MENGUBAH CLASS/POSISI
-
-              // Pastikan animasi fade tetap berjalan, kita tambahkan class 'is-changing' kembali
-              // sebentar jika diperlukan, tapi karena kita me-replace className sepenuhnya,
-              // kita tidak perlu menambahkan class transisi lagi di sini karena posisi langsung berubah.
-              // Namun, untuk transisi opacity yang halus saat masuk:
+              nut.className = data.nuts[index].cls;
               nut.classList.add("opacity-0");
-
-              // Trigger reflow agar browser sadar ada perubahan sebelum transisi masuk
               void nut.offsetWidth;
-
               nut.classList.remove("opacity-0");
               nut.style.transition = "opacity 0.5s ease-in-out";
             }
@@ -1030,19 +1099,33 @@
           heroBlurCircle.dataset.colorClass = data.blurColor;
 
           // --- Fase 3: Fade In ---
-          animatedElements.forEach((el) => el.classList.remove("is-changing"));
-          nuts.forEach((el) => el.classList.remove("is-changing")); // Kacang fade in
+          animatedElements.forEach((el) =>
+            el.classList.remove("is-changing")
+          );
+          nuts.forEach((el) => el.classList.remove("is-changing"));
           waveImage.classList.remove("is-changing");
           waveImageFooter.classList.remove("is-changing");
 
           isAnimating = false;
-        }, 400); // Durasi disamakan dengan transisi 3D (0.4s)
+        }, 400);
       }
 
       // 5. Pasang Event Listeners
-      btnHijau.addEventListener("click", () => updateProduct("hijau"));
-      btnAlmond.addEventListener("click", () => updateProduct("almond"));
-      btnCashew.addEventListener("click", () => updateProduct("cashew"));
+      btnHijau.addEventListener("click", () => {
+        updateProduct("hijau");
+        resetAutoRotation(); // Reset timer saat diklik
+      });
+      btnAlmond.addEventListener("click", () => {
+        updateProduct("almond");
+        resetAutoRotation(); // Reset timer saat diklik
+      });
+      btnCashew.addEventListener("click", () => {
+        updateProduct("cashew");
+        resetAutoRotation(); // Reset timer saat diklik
+      });
+
+      // 6. Mulai Auto Rotation saat halaman dimuat
+      startAutoRotation();
     </script>
   </body>
 </html>
